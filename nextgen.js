@@ -5360,6 +5360,7 @@ if (svgcontainer != undefined) {
                 i_cnt.style.fill = "none";
                 i_cnt.style.strokeDasharray = length + 1;
                 i_cnt.style.strokeDashoffset = length + 1;
+                i_cnt.setAttribute("data-offset", length+1);
             });
 
             let linedraw = item.querySelector(".linedraw"),
@@ -5381,14 +5382,16 @@ if (svgcontainer != undefined) {
                     delay: 5,
                 });
 
+            console.log(linedraw.getAttribute("data-offset"));
+            
             whoSvgTl.to(linedraw, {
-                strokeDashoffset: linedraw.getAttribute("stroke-dasharray"),
+                strokeDashoffset: linedraw.getAttribute("data-offset"),
                 duration: 2,
                 ease: "Power2.easeOut"
             })
             restLine.forEach((i_cnt) => {
                 whoSvgTl.to(i_cnt, {
-                    strokeDashoffset: i_cnt.getAttribute("stroke-dasharray"),
+                    strokeDashoffset: i_cnt.getAttribute("data-offset"),
                     duration: 2,
                     ease: "Power2.easeOut"
                 }, "<")
