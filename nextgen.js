@@ -5322,6 +5322,28 @@ if (svgcontainer != undefined) {
 
             </div>
         </div>
+
+        <style>
+        .who_slider{
+            position: relative;
+            width:100%;
+            height: 100%;
+        }
+        .who_slider_item{
+            position: absolute;
+            width:100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            display:flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .who_slider_item svg{
+            height: 100%;
+            width: auto;
+        }
+        </style>
     `;
     setTimeout(() => {
         let sliderItem = svgcontainer.querySelectorAll(".who_slider_item");
