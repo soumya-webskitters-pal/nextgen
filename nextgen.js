@@ -5379,7 +5379,7 @@ if (svgcontainer != undefined) {
                 }, "-=0.5")
                 .to(item, {
                     opacity: 1,
-                    delay: 3,
+                    delay: 2,
                 });
 
             console.log(linedraw.getAttribute("data-offset"));
