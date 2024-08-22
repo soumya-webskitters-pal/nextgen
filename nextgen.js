@@ -5338,6 +5338,7 @@ if (svgcontainer != undefined) {
             display:flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
         }
         .who_slider_item svg{
             height: 100%;
@@ -5347,7 +5348,7 @@ if (svgcontainer != undefined) {
     `;
     setTimeout(() => {
         let sliderItem = svgcontainer.querySelectorAll(".who_slider_item");
-        let whoSvgTl = gsap.timeline({ defaults: { ease: "none" } });
+        let whoSvgTl = gsap.timeline({ repeat: -1, defaults: { ease: "none" } });
         whoSvgTl.set(svgcontainer, { opacity: 1 });
 
         sliderItem.forEach((item, i) => {
@@ -5361,6 +5362,10 @@ if (svgcontainer != undefined) {
                 i_cnt.style.fill = "none";
                 i_cnt.style.strokeDasharray = length + 1;
                 i_cnt.style.strokeDashoffset = length + 1;
+
+                whoSvgTl.set(i_cnt, {
+                    strokeDashoffset: length + 1
+                })
             });
 
             whoSvgTl.to(item.querySelector(".linedraw"), {
