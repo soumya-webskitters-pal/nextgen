@@ -5368,7 +5368,7 @@ if (svgcontainer != undefined) {
 
             whoSvgTl.set(item, { opacity: 1, })
                 .to(linedraw, {
-                    duration: 1.5,
+                    duration: 3,
                     strokeDashoffset: 0,
                     ease: "Power2.easeIn"
                 })
@@ -5379,20 +5379,20 @@ if (svgcontainer != undefined) {
                 }, "-=0.5")
                 .to(item, {
                     opacity: 1,
-                    delay: 5,
+                    delay: 3,
                 });
 
             console.log(linedraw.getAttribute("data-offset"));
             
             whoSvgTl.to(linedraw, {
                 strokeDashoffset: linedraw.getAttribute("data-offset"),
-                duration: 2,
+                duration: 3,
                 ease: "Power2.easeOut"
             })
             restLine.forEach((i_cnt) => {
                 whoSvgTl.to(i_cnt, {
                     strokeDashoffset: i_cnt.getAttribute("data-offset"),
-                    duration: 2,
+                    duration: 4,
                     ease: "Power2.easeOut"
                 }, "<")
             })
