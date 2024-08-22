@@ -5351,6 +5351,7 @@ if (svgcontainer != undefined) {
         let whoSvgTl = gsap.timeline({ repeat: -1, defaults: { ease: "none" } });
         whoSvgTl.set(svgcontainer, { opacity: 0 });
         whoSvgTl.set(sliderItem, { opacity: 0 });
+        whoSvgTl.to(svgcontainer, { opacity: 1 });
 
         sliderItem.forEach((item, i) => {
             whoSvgTl.to(item, { opacity: 1, duration: 0.3, });
