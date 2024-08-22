@@ -5349,7 +5349,8 @@ if (svgcontainer != undefined) {
     setTimeout(() => {
         let sliderItem = svgcontainer.querySelectorAll(".who_slider_item");
         let whoSvgTl = gsap.timeline({ repeat: -1, defaults: { ease: "none" } });
-        whoSvgTl.set(svgcontainer, { opacity: 1 });
+        whoSvgTl.set(svgcontainer, { opacity: 0 });
+        whoSvgTl.set(sliderItem, { opacity: 0 });
 
         sliderItem.forEach((item, i) => {
             whoSvgTl.to(item, { opacity: 1, duration: 0.3, });
