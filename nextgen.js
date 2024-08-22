@@ -5382,6 +5382,10 @@ if (svgcontainer != undefined) {
                     strokeDashoffset: 0,
                     ease: "none"
                 }, "-=1.5");
+
+            if (i == sliderItem.length - 1) {
+                whoSvgTl.to(sliderItem[i], { opacity: 0 }, "-=0.25");
+            }
         })
         // whoSvgTl.pause();
         // ScrollTrigger.create({
