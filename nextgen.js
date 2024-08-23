@@ -5397,18 +5397,12 @@ if (svgcontainer != undefined) {
                 }, "<")
             })
             whoSvgTl.set(item, { opacity: 0 });
-            // if (i > 0) {
-            //     whoSvgTl.set(sliderItem[i - 1], { opacity: 0 });
-            // }
-            // if (i == sliderItem.length - 1) {
-            //     whoSvgTl.set(sliderItem[i], { opacity: 0 });
-            // }
         })
-        // whoSvgTl.pause();
-        // ScrollTrigger.create({
-        //     trigger: svgcontainer,
-        //     start: "top center",
-        //     animation: whoSvgTl,
-        // });
+        whoSvgTl.pause();
+        ScrollTrigger.create({
+            trigger: svgcontainer,
+            start: "top center",
+            animation: whoSvgTl,
+        });
     }, 300);
 }
