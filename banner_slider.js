@@ -251,7 +251,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		  gl_FragColor = mix( t1, t2, intpl );
 		}
 	`,
-      displacementMap: 'aa/disp1.jpg',
+      displacementMap: 'https://soumya-webskitters-pal.github.io/nextgen/disp1.jpg',
       images: imgSrc,
     });
   }
