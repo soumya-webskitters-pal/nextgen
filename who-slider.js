@@ -5381,9 +5381,7 @@ if (svgcontainer != undefined) {
                     opacity: 1,
                     delay: 2,
                 });
-
-            console.log(linedraw.getAttribute("data-offset"));
-
+            //console.log(linedraw.getAttribute("data-offset"));
             whoSvgTl.to(linedraw, {
                 strokeDashoffset: linedraw.getAttribute("data-offset"),
                 duration: 3,
