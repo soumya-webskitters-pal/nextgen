@@ -5341,8 +5341,8 @@ if (svgcontainer != undefined) {
             overflow: hidden;
         }
         .who_slider_item svg{
-            height: 100%;
-            width: auto;
+            height: auto;
+            width: 100%;
         }
         </style>
     `;
