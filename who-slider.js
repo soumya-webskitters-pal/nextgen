@@ -5326,9 +5326,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
         <style>
         .who_slider{
-            position: relative;
+            position: absolute;
             width:100%;
             height: 100%;
+            top:0;
+            left:0;
         }
         .who_slider_item{
             position: absolute;
