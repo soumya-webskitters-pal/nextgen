@@ -5339,7 +5339,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
             display:flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
         }
         .who_slider_item svg{
             height: auto;
