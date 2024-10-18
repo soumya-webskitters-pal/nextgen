@@ -4170,20 +4170,20 @@ document.addEventListener("DOMContentLoaded", function (event) {
             <stop stop-color="#AE00FF" />
             <stop offset="1" stop-color="#00E9E5" />
         </linearGradient>
-        <linearGradient id="paint61_linear_89_2" x1="-nan" y1="-nan" x2="-nan" y2="-nan" gradientUnits="userSpaceOnUse">
+        <!-- <linearGradient id="paint61_linear_89_2" x1="-nan" y1="-nan" x2="-nan" y2="-nan" gradientUnits="userSpaceOnUse">
             <stop stop-color="#AE00FF" />
             <stop offset="1" stop-color="#00E9E5" />
         </linearGradient>
         <linearGradient id="paint62_linear_89_2" x1="-nan" y1="-nan" x2="-nan" y2="-nan" gradientUnits="userSpaceOnUse">
             <stop stop-color="#AE00FF" />
             <stop offset="1" stop-color="#00E9E5" />
-        </linearGradient>
+        </linearGradient> -->
         <linearGradient id="paint63_linear_89_2" x1="1193.27" y1="3071.98" x2="1193.27" y2="3080.98"
             gradientUnits="userSpaceOnUse">
             <stop stop-color="#AE00FF" />
             <stop offset="1" stop-color="#00E9E5" />
         </linearGradient>
-        <linearGradient id="paint64_linear_89_2" x1="-nan" y1="-nan" x2="-nan" y2="-nan" gradientUnits="userSpaceOnUse">
+        <!-- <linearGradient id="paint64_linear_89_2" x1="-nan" y1="-nan" x2="-nan" y2="-nan" gradientUnits="userSpaceOnUse">
             <stop stop-color="#AE00FF" />
             <stop offset="1" stop-color="#00E9E5" />
         </linearGradient>
@@ -4194,13 +4194,13 @@ document.addEventListener("DOMContentLoaded", function (event) {
         <linearGradient id="paint66_linear_89_2" x1="-nan" y1="-nan" x2="-nan" y2="-nan" gradientUnits="userSpaceOnUse">
             <stop stop-color="#AE00FF" />
             <stop offset="1" stop-color="#00E9E5" />
-        </linearGradient>
+        </linearGradient> -->
         <linearGradient id="paint67_linear_89_2" x1="962.02" y1="3115.48" x2="962.02" y2="3128.48"
             gradientUnits="userSpaceOnUse">
             <stop stop-color="#AE00FF" />
             <stop offset="1" stop-color="#00E9E5" />
         </linearGradient>
-        <linearGradient id="paint68_linear_89_2" x1="-nan" y1="-nan" x2="-nan" y2="-nan" gradientUnits="userSpaceOnUse">
+        <!-- <linearGradient id="paint68_linear_89_2" x1="-nan" y1="-nan" x2="-nan" y2="-nan" gradientUnits="userSpaceOnUse">
             <stop stop-color="#AE00FF" />
             <stop offset="1" stop-color="#00E9E5" />
         </linearGradient>
@@ -4211,7 +4211,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         <linearGradient id="paint70_linear_89_2" x1="-nan" y1="-nan" x2="-nan" y2="-nan" gradientUnits="userSpaceOnUse">
             <stop stop-color="#AE00FF" />
             <stop offset="1" stop-color="#00E9E5" />
-        </linearGradient>
+        </linearGradient> -->
         <linearGradient id="paint71_linear_89_2" x1="1364.02" y1="3037.98" x2="1364.02" y2="3045.48"
             gradientUnits="userSpaceOnUse">
             <stop stop-color="#AE00FF" />
@@ -4222,7 +4222,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
             <stop stop-color="#AE00FF" />
             <stop offset="1" stop-color="#00E9E5" />
         </linearGradient>
-        <linearGradient id="paint73_linear_89_2" x1="-nan" y1="-nan" x2="-nan" y2="-nan" gradientUnits="userSpaceOnUse">
+        <!-- <linearGradient id="paint73_linear_89_2" x1="-nan" y1="-nan" x2="-nan" y2="-nan" gradientUnits="userSpaceOnUse">
             <stop stop-color="#AE00FF" />
             <stop offset="1" stop-color="#00E9E5" />
         </linearGradient>
@@ -4245,7 +4245,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         <linearGradient id="paint78_linear_89_2" x1="-nan" y1="-nan" x2="-nan" y2="-nan" gradientUnits="userSpaceOnUse">
             <stop stop-color="#AE00FF" />
             <stop offset="1" stop-color="#00E9E5" />
-        </linearGradient>
+        </linearGradient> -->
         <linearGradient id="paint79_linear_89_2" x1="1412.77" y1="1350.48" x2="1412.77" y2="1487.65"
             gradientUnits="userSpaceOnUse">
             <stop stop-color="#AE00FF" />
@@ -4321,10 +4321,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
             <stop stop-color="#AE00FF" />
             <stop offset="1" stop-color="#00E9E5" />
         </linearGradient>
-        <linearGradient id="paint94_linear_89_2" x1="-nan" y1="-nan" x2="-nan" y2="-nan" gradientUnits="userSpaceOnUse">
+        <!-- <linearGradient id="paint94_linear_89_2" x1="-nan" y1="-nan" x2="-nan" y2="-nan" gradientUnits="userSpaceOnUse">
             <stop stop-color="#AE00FF" />
             <stop offset="1" stop-color="#00E9E5" />
-        </linearGradient>
+        </linearGradient> -->
         <linearGradient id="paint95_linear_89_2" x1="990.829" y1="3113.59" x2="994.708" y2="3134.32"
             gradientUnits="userSpaceOnUse">
             <stop stop-color="#AE00FF" />
