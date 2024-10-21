@@ -24,6 +24,7 @@ if (!model_wrapper != undefined) {
         });
     });
     function modelApp() {
+        console.log("call");
         const container = document.getElementById('canvas');
         const loader = container.querySelector('.sc_loader');
         const sizes = {
@@ -220,12 +221,6 @@ if (!model_wrapper != undefined) {
         //reset button
         const resetCam = container.querySelector(".reset")
 
-        //show stat
-        // const stats = new Stats();
-        // stats.showPanel(0);
-        // stats.domElement.style.position = 'absolute';
-        // document.body.appendChild(stats.domElement);
-
         //add bg color
         scene.background = new THREE.Color('#000000');
         controls.enabled = false;
@@ -269,6 +264,7 @@ if (!model_wrapper != undefined) {
 
 
         function init() {
+            console.log("init");
             resetCamera();
 
             renderer.setSize(sizes.width, sizes.height);
@@ -353,7 +349,7 @@ if (!model_wrapper != undefined) {
                     addTexture();
                     model.loaded = true;
                     enableSetup();
-                    // console.log("world:", world);
+                    console.log("world:", world);
                 },
                 function (xhr) {
                     // console.log(xhr);
