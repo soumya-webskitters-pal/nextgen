@@ -13,13 +13,7 @@ if (!model_wrapper != undefined) {
       opacity: 0,
     })
     gsap.to(container, {
-
       opacity: 1,
-      onComplete: () => {
-        gsap.set(container, {
-          pointerEvents: "all",
-        });
-      }
     });
   });
   function modelApp() {
@@ -222,15 +216,6 @@ if (!model_wrapper != undefined) {
     scene.background = new THREE.Color('#000000');
     controls.enabled = false;
 
-    function adjustWindow() {
-      sizes.width = container.clientWidth;
-      sizes.height = container.clientHeight;
-
-      camera.aspect = sizes.width / sizes.height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(sizes.width, sizes.height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    }
 
     function controlCameraRange() {
       controls.enabled = true;
@@ -247,6 +232,8 @@ if (!model_wrapper != undefined) {
       controls.maxAzimuthAngle = Math.PI / 3;
     }
 
+
+    //// reset camera
     function resetCamera() {
       camera.aspect = sizes.width / sizes.height;
       camera.updateProjectionMatrix();
@@ -258,7 +245,6 @@ if (!model_wrapper != undefined) {
       lookAt.z = camera.position.z;
       controlCameraRange();
     }
-
 
     function init() {
       resetCamera();
@@ -279,6 +265,8 @@ if (!model_wrapper != undefined) {
       renderScene();
     }
 
+
+    //// enable setup
     function enableSetup() {
       gsap.set(info_modal, {
         opacity: 0,
@@ -291,6 +279,11 @@ if (!model_wrapper != undefined) {
         duration: 0.5,
         onComplete: () => {
           loader.remove();
+
+          gsap.set(container, {
+            pointerEvents: "all",
+          });
+
           info_modal.querySelector('.modal_data[data-id="arena"]').classList.add('show');
           gsap.to(info_modal, {
             opacity: 1,
@@ -312,13 +305,11 @@ if (!model_wrapper != undefined) {
               i == 0 ? e.classList.add('show') : e.classList.remove('show')
             })
           });
-
-          renderer.domElement.addEventListener("mousemove", onMouseMove, false);
-          renderer.domElement.addEventListener("click", onClick, false);
         },
       })
     }
 
+    //// render scene
     function renderScene() {
       if (model.loaded) {
         controls.update();
@@ -327,7 +318,7 @@ if (!model_wrapper != undefined) {
       requestAnimationFrame(renderScene);
     }
 
-    //load model
+    //// load model
     function loadModel() {
       new THREE.GLTFLoader().load(
         // resource URL
@@ -348,7 +339,8 @@ if (!model_wrapper != undefined) {
       );
     }
 
-    //add light
+    //// add light
+    //////////////////////
     function addLight() {
       //// Env light
       scene.add(new THREE.AmbientLight(model.ambient.color, 0.5));
@@ -410,7 +402,6 @@ if (!model_wrapper != undefined) {
       scene.add(roomLight);
 
       //add piller light
-
       let pillerLights = pillerLight({ x: 0.2, y: 0.5, z: 19.2, r: 0.5, h: 12, color: model.theme.color, step: 18 });
       //piller light 1
       let pillerLight1 = pillerLights.clone();
@@ -466,6 +457,7 @@ if (!model_wrapper != undefined) {
       ));
       return pillerLightGroup;
     }
+
     function GlowLight(dimention, colors, step, spread) {
       var glowLight = new THREE.Group();
       glowLight.position.x = 0;
@@ -501,6 +493,8 @@ if (!model_wrapper != undefined) {
       scene.add(obj.target);
     }
 
+    //// add texture
+    //////////////////////
     function addTexture() {
       let elm = model.element;
 
@@ -707,7 +701,6 @@ if (!model_wrapper != undefined) {
       heatObj.receiveShadow = false;
       //console.log("heatbox:", heatObj);
       createInteractiveMeshes(elm.heatbox);
-
 
 
       //add texture to sensor unit
@@ -932,10 +925,6 @@ if (!model_wrapper != undefined) {
       scene.add(menOBJS2);
       // console.log(menOBJS2);
     }
-    init();
-    //window.addEventListener("load", init);
-    window.addEventListener("resize", adjustWindow);
-
 
     //// interaction
     //////////////////////
@@ -984,7 +973,6 @@ if (!model_wrapper != undefined) {
       e.preventDefault();
       detecthover(e);
     }
-
 
     function detecthover(e) {
       container.style.cursor = "default";
@@ -1060,5 +1048,25 @@ if (!model_wrapper != undefined) {
         clickable: el.click,
       });
     }
+
+    //// responsive canvas
+    function adjustWindow() {
+      sizes.width = container.clientWidth;
+      sizes.height = container.clientHeight;
+
+      camera.aspect = sizes.width / sizes.height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(sizes.width, sizes.height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    }
+
+
+    renderer.domElement.addEventListener("mousemove", onMouseMove, false);
+    renderer.domElement.addEventListener("click", onClick, false);
+
+
+    //// init function
+    init();
+    window.addEventListener("resize", adjustWindow);
   }
 }
