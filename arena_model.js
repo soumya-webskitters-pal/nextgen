@@ -291,7 +291,7 @@ if (!model_wrapper != undefined) {
         duration: 0.5,
         onComplete: () => {
           loader.remove();
-          info_modal.querySelectorAll('.modal_data')[0].classList.add('show');
+          info_modal.querySelector('.modal_data[data-id="arena"]').classList.add('show');
           gsap.to(info_modal, {
             opacity: 1,
             pointerEvents: "all",
@@ -1060,8 +1060,5 @@ if (!model_wrapper != undefined) {
         clickable: el.click,
       });
     }
-
-    // renderer.domElement.addEventListener("mousemove", onMouseMove, false);
-    // renderer.domElement.addEventListener("click", onClick, false);
   }
 }
