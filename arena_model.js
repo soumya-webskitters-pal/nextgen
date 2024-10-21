@@ -209,8 +209,8 @@ if (!model_wrapper != undefined) {
     const tooltip = document.createElement('div');
     tooltip.classList.add('info_tooltip');
     container.appendChild(tooltip);
-    let xSetter = gsap.quickSetter(tooltip, "x", "px")
-    let ySetter = gsap.quickSetter(tooltip, "y", "px")
+    let xSetter = gsap.quickSetter(tooltip, "x", "px");
+    let ySetter = gsap.quickSetter(tooltip, "y", "px");
 
     //info modal
     const info_modal = container.querySelector('.arena_modal');
@@ -315,20 +315,18 @@ if (!model_wrapper != undefined) {
           i == 0 ? e.classList.add('show') : e.classList.remove('show')
         })
       });
+
+      renderer.domElement.addEventListener("mousemove", onMouseMove, false);
+      renderer.domElement.addEventListener("click", onClick, false);
     }
 
     function renderScene() {
-      updateObjects();
-      renderer.render(scene, camera);
-      requestAnimationFrame(renderScene);
-    }
-
-    function updateObjects() {
       if (model.loaded) {
         controls.update();
       }
+      renderer.render(scene, camera);
+      requestAnimationFrame(renderScene);
     }
-
 
     //load model
     function loadModel() {
@@ -991,6 +989,7 @@ if (!model_wrapper != undefined) {
 
     function detecthover(e) {
       container.style.cursor = "default";
+      // tooltip.innerHTML = '';
       tooltip.classList.remove('show');
       xSetter(e.clientX), ySetter(e.clientY);
 
@@ -1063,7 +1062,7 @@ if (!model_wrapper != undefined) {
       });
     }
 
-    renderer.domElement.addEventListener("mousemove", onMouseMove, false);
-    renderer.domElement.addEventListener("click", onClick, false);
+    // renderer.domElement.addEventListener("mousemove", onMouseMove, false);
+    // renderer.domElement.addEventListener("click", onClick, false);
   }
 }
