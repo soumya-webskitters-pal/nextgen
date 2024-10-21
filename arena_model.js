@@ -280,44 +280,43 @@ if (!model_wrapper != undefined) {
     }
 
     function enableSetup() {
+      gsap.set(info_modal, {
+        opacity: 0,
+        pointerEvents: "none",
+        yPercent: 100,
+      });
       gsap.to(loader, {
         delay: 0.5,
         opacity: 0,
         duration: 0.5,
         onComplete: () => {
           loader.remove();
+          info_modal.querySelectorAll('.modal_data')[0].classList.add('show');
+          gsap.to(info_modal, {
+            opacity: 1,
+            pointerEvents: "all",
+            yPercent: 0,
+            duration: 0.5,
+          });
+
+          gsap.set(resetCam, {
+            opacity: 0,
+            pointerEvents: "none",
+          });
+          resetCam.addEventListener("click", () => {
+            gsap.to(resetCam, { opacity: 0, pointerEvents: "none", duration: 0.5 });
+            controls.enabled = true;
+            controlCameraRange();
+            resetCamera();
+            info_modal.querySelectorAll('.modal_data').forEach((e, i) => {
+              i == 0 ? e.classList.add('show') : e.classList.remove('show')
+            })
+          });
+
+          renderer.domElement.addEventListener("mousemove", onMouseMove, false);
+          renderer.domElement.addEventListener("click", onClick, false);
         },
       })
-      gsap.set(resetCam, {
-        opacity: 0,
-        pointerEvents: "none",
-      });
-      info_modal.querySelectorAll('.modal_data')[0].classList.add('show');
-
-      gsap.set(info_modal, {
-        opacity: 0,
-        pointerEvents: "none",
-        yPercent: 100,
-      });
-      gsap.to(info_modal, {
-        opacity: 1,
-        pointerEvents: "all",
-        yPercent: 0,
-        duration: 0.5,
-      });
-
-      resetCam.addEventListener("click", () => {
-        gsap.to(resetCam, { opacity: 0, pointerEvents: "none", duration: 0.5 });
-        controls.enabled = true;
-        controlCameraRange();
-        resetCamera();
-        info_modal.querySelectorAll('.modal_data').forEach((e, i) => {
-          i == 0 ? e.classList.add('show') : e.classList.remove('show')
-        })
-      });
-
-      renderer.domElement.addEventListener("mousemove", onMouseMove, false);
-      renderer.domElement.addEventListener("click", onClick, false);
     }
 
     function renderScene() {
