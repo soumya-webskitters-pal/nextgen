@@ -24,7 +24,7 @@ function modelApp() {
     const model = {
         loaded: false,
         src: "https://soumya-webskitters-pal.github.io/nextgen/model.glb",
-        envMap: textureLoader.load("https://soumya-webskitters-pal.github.io/nextgen/texture/env_map.webp"),
+        // envMap: textureLoader.load("https://soumya-webskitters-pal.github.io/nextgen/texture/env_map.webp"),
         element: {
             wall: {
                 name: "room",
@@ -49,7 +49,7 @@ function modelApp() {
             },
             cage: {
                 name: "metal",
-                map: textureLoader.load("texture/cage.png"),
+                // map: textureLoader.load("texture/cage.png"),
                 color: ["#4f4f4f", "#026bff"],
                 click: false,
                 text: "Arena",
