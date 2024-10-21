@@ -302,7 +302,7 @@ if (!model_wrapper != undefined) {
             controlCameraRange();
             resetCamera();
             info_modal.querySelectorAll('.modal_data').forEach((e, i) => {
-              i == 0 ? e.classList.add('show') : e.classList.remove('show')
+              e.dataset.id ="arena" ? e.classList.add('show') : e.classList.remove('show')
             })
           });
         },
