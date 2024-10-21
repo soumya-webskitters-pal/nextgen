@@ -1,3 +1,4 @@
+window.addEventListener("DOMContentLoaded", modelApp);
 function modelApp() {
     const container = document.getElementById('canvas');
     const loader = container.querySelector('.sc_loader');
