@@ -1,20 +1,43 @@
 const model_wrapper = document.querySelector('.model_wrapper');
 if (!model_wrapper != undefined) {
+  //UI
   const container = model_wrapper.querySelector('.canvas_area');
   const modelViewer = model_wrapper.querySelector('.enable_model');
+ 
+  //add tooltip
+  const tooltip = document.createElement('div');
+  tooltip.classList.add('info_tooltip');
+  container.appendChild(tooltip);
+
+  //info modal
+  const info_modal = container.querySelector('.arena_modal');
+
+  //reset button
+  const resetCam = container.querySelector(".reset");
+
+  window.addEventListener("DOMContentLoaded", modelApp);
   modelViewer.addEventListener("click", function () {
-    modelApp();
+    // modelApp();
     gsap.to(modelViewer, {
       pointerEvents: "none",
       opacity: 0,
     });
     gsap.to(".imms_container", {
+      duration: 0.5,
       pointerEvents: "none",
       opacity: 0,
+      onComplete: () => {
+        gsap.to(container, {
+          pointerEvents: "all",
+        });
+        gsap.to(info_modal, {
+          opacity: 1,
+          pointerEvents: "all",
+          yPercent: 0,
+          duration: 0.5,
+        });
+      }
     })
-    gsap.to(container, {
-      opacity: 1,
-    });
   });
   function modelApp() {
     const container = document.getElementById('canvas');
@@ -191,26 +214,15 @@ if (!model_wrapper != undefined) {
     };
 
     const cameraResetPos = new THREE.Vector3(0, 18.5, 45);
-    const lookAt = new THREE.Vector3(0, 1.5, 0);
+    const lookAt = new THREE.Vector3(0, 0, 0);
     var interactiveMeshes = [];
     let zoomed = false;
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
     const mousePxPositionOnClickStart = new THREE.Vector2();
 
-    //UI
-    //add tooltip
-    const tooltip = document.createElement('div');
-    tooltip.classList.add('info_tooltip');
-    container.appendChild(tooltip);
     let xSetter = gsap.quickSetter(tooltip, "x", "px");
     let ySetter = gsap.quickSetter(tooltip, "y", "px");
-
-    //info modal
-    const info_modal = container.querySelector('.arena_modal');
-
-    //reset button
-    const resetCam = container.querySelector(".reset")
 
     //add bg color
     scene.background = new THREE.Color('#000000');
@@ -247,6 +259,10 @@ if (!model_wrapper != undefined) {
     }
 
     function init() {
+      gsap.set(container, {
+        pointerEvents: "none",
+      });
+
       resetCamera();
 
       renderer.setSize(sizes.width, sizes.height);
@@ -260,6 +276,7 @@ if (!model_wrapper != undefined) {
 
       // first render
       container.appendChild(renderer.domElement);
+
       loadModel();
       addLight();
       renderScene();
@@ -280,33 +297,25 @@ if (!model_wrapper != undefined) {
         onComplete: () => {
           loader.remove();
 
-          gsap.set(container, {
-            pointerEvents: "all",
-          });
-
           info_modal.querySelector('.modal_data[data-id="arena"]').classList.add('show');
-          gsap.to(info_modal, {
-            opacity: 1,
-            pointerEvents: "all",
-            yPercent: 0,
-            duration: 0.5,
-          });
 
           gsap.set(resetCam, {
             opacity: 0,
             pointerEvents: "none",
           });
-          resetCam.addEventListener("click", () => {
-            gsap.to(resetCam, { opacity: 0, pointerEvents: "none", duration: 0.5 });
-            controls.enabled = true;
-            controlCameraRange();
-            resetCamera();
-            info_modal.querySelectorAll('.modal_data').forEach((e, i) => {
-              e.dataset.id == "arena" ? e.classList.add('show') : e.classList.remove('show');
-            })
-          });
+
         },
-      })
+      });
+
+      resetCam.addEventListener("click", () => {
+        gsap.to(resetCam, { opacity: 0, pointerEvents: "none", duration: 0.5 });
+        controls.enabled = true;
+        controlCameraRange();
+        resetCamera();
+        info_modal.querySelectorAll('.modal_data').forEach((e, i) => {
+          e.dataset.id == "arena" ? e.classList.add('show') : e.classList.remove('show');
+        });
+      });
     }
 
     //// render scene
