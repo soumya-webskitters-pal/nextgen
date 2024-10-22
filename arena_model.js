@@ -1,20 +1,7 @@
 const model_wrapper = document.querySelector('.model_wrapper');
 if (!model_wrapper != undefined) {
-  //UI
   const container = model_wrapper.querySelector('.canvas_area');
   const modelViewer = model_wrapper.querySelector('.enable_model');
- 
-  //add tooltip
-  const tooltip = document.createElement('div');
-  tooltip.classList.add('info_tooltip');
-  container.appendChild(tooltip);
-
-  //info modal
-  const info_modal = container.querySelector('.arena_modal');
-
-  //reset button
-  const resetCam = container.querySelector(".reset");
-
   window.addEventListener("DOMContentLoaded", modelApp);
   modelViewer.addEventListener("click", function () {
     // modelApp();
@@ -214,15 +201,26 @@ if (!model_wrapper != undefined) {
     };
 
     const cameraResetPos = new THREE.Vector3(0, 18.5, 45);
-    const lookAt = new THREE.Vector3(0, 0, 0);
+    const lookAt = new THREE.Vector3(0, 1.5, 0);
     var interactiveMeshes = [];
     let zoomed = false;
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
     const mousePxPositionOnClickStart = new THREE.Vector2();
 
+    //UI
+    //add tooltip
+    const tooltip = document.createElement('div');
+    tooltip.classList.add('info_tooltip');
+    container.appendChild(tooltip);
     let xSetter = gsap.quickSetter(tooltip, "x", "px");
     let ySetter = gsap.quickSetter(tooltip, "y", "px");
+
+    //info modal
+    const info_modal = container.querySelector('.arena_modal');
+
+    //reset button
+    const resetCam = container.querySelector(".reset")
 
     //add bg color
     scene.background = new THREE.Color('#000000');
@@ -303,7 +301,7 @@ if (!model_wrapper != undefined) {
             opacity: 0,
             pointerEvents: "none",
           });
-
+        
         },
       });
 
