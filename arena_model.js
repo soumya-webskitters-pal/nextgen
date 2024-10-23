@@ -54,7 +54,7 @@ if (!model_wrapper != undefined) {
   });
   function modelApp() {
     const container = document.getElementById('canvas');
-    const loader = container.querySelector('.sc_loader');
+    const loader = document.getElementById('loader');
     const sizes = {
       width: container.clientWidth,
       height: container.clientHeight,
