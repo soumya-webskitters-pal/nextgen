@@ -1,16 +1,3 @@
-// import * as THREE from 'three';
-// import { OrbitControls } from 'addons/controls/OrbitControls.js';
-// import { CSS2DRenderer, CSS2DObject } from 'addons/renderers/CSS2DRenderer.js';
-// import { GUI } from 'addons/libs/lil-gui.module.min.js';
-// import { GLTFLoader } from 'addons/loaders/GLTFLoader.js';
-// import { EffectComposer } from 'addons/postprocessing/EffectComposer.js';
-// import { RenderPass } from 'addons/postprocessing/RenderPass.js';
-// import { ShaderPass } from 'addons/postprocessing/ShaderPass.js';
-// import { BloomPass } from 'addons/postprocessing/BloomPass.js';
-// import { FilmPass } from 'addons/postprocessing/FilmPass.js';
-// import Stats from 'addons/libs/stats.module.js';
-// import { FocusShader } from 'addons/shaders/FocusShader.js';
-
 const model_wrapper = document.querySelector('.model_wrapper');
 if (!model_wrapper != undefined) {
   //UI
@@ -28,7 +15,7 @@ if (!model_wrapper != undefined) {
   //reset button
   const resetCam = container.querySelector(".reset");
 
-  // window.addEventListener("DOMContentLoaded", modelApp);
+  window.addEventListener("DOMContentLoaded", modelApp);
   modelViewer.addEventListener("click", function () {
     // modelApp();
     gsap.to(modelViewer, {
@@ -54,7 +41,7 @@ if (!model_wrapper != undefined) {
   });
   function modelApp() {
     const container = document.getElementById('canvas');
-    const loader = document.getElementById('loader');
+    const loader = model_wrapper.querySelector('.sc_loader');
     const sizes = {
       width: container.clientWidth,
       height: container.clientHeight,
@@ -297,6 +284,9 @@ if (!model_wrapper != undefined) {
         duration: 0.5,
         onComplete: () => {
           loader.remove();
+
+          gsap.to(".nav_list>li", { opacity: 1, yPercent: 0, stagger: 0.05, });
+          loadAnimation();
 
           info_modal.querySelector('.modal_data[data-id="arena"]').classList.add('show');
 
