@@ -241,7 +241,7 @@ if (!model_wrapper != undefined) {
 
     //add bg color
     scene.background = new THREE.Color('#000000');
-    // controls.enabled = false;
+    controls.enabled = false;
 
     //// reset camera
     camera.aspect = sizes.width / sizes.height;
@@ -280,7 +280,7 @@ if (!model_wrapper != undefined) {
       renderScene();
 
       //camera
-      // zoomInTimeline(cameraResetPos, true, true);
+      zoomInTimeline(cameraResetPos, true, true);
     }
 
 
