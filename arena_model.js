@@ -228,7 +228,7 @@ if (!model_wrapper != undefined) {
       }
     };
 
-    const cameraResetPos = new THREE.Vector3(-18, 4.5, 22);
+    const cameraResetPos = new THREE.Vector3(-24, 5, 22);
     // const lookAt = new THREE.Vector3(0, 0, 0);
     var interactiveMeshes = [];
     let zoomed = false;
@@ -256,7 +256,7 @@ if (!model_wrapper != undefined) {
     controls.minPolarAngle = Math.PI / 2.61;
     controls.maxPolarAngle = Math.PI / 2.1;
     controls.minAzimuthAngle = - Math.PI / 4.5;
-    controls.maxAzimuthAngle = Math.PI / 3;
+    controls.maxAzimuthAngle = Math.PI / 2.5;
 
     function init() {
       gsap.set(container, {
@@ -1073,7 +1073,7 @@ if (!model_wrapper != undefined) {
     //////////////////////
     function zoomInTimeline(pos, rotate = false, reset = false) {
       if (reset) {
-        let zoomOutFactor = 0.01;
+        let zoomOutFactor = 0.001;
         controls.enabled = false;
         let camTl = gsap.timeline({
           defaults: {
@@ -1086,23 +1086,23 @@ if (!model_wrapper != undefined) {
           }
         });
         camTl
-          .to(controls.target, { x: pos.x, y: pos.y, z: pos.z, })
+          .to(controls.target, { x: pos.x, y: pos.y - zoomOutFactor / 10, z: pos.z, })
           .to(camera.position, {
             x: pos.x - zoomOutFactor,
-            y: pos.y,
+            y: pos.y ,
             z: pos.z,
           }, "<")
           .to(controls, {
             minDistance: 10,
             maxDistance: 45,
-            minPolarAngle: Math.PI / 1.9,
-            maxPolarAngle: Math.PI / 1.8,
-            minAzimuthAngle: - Math.PI / 4.5,
-            maxAzimuthAngle: Math.PI / 3,
+            minPolarAngle: Math.PI / 3,
+            maxPolarAngle: Math.PI / 1.95,
+            minAzimuthAngle: - Math.PI / 3.8,
+            maxAzimuthAngle: Math.PI / 3.5,
           }, "<");
       }
       else {
-        let zoomOutFactor = 5;
+        let zoomOutFactor = 8;
         zoomed = true;
         controls.enabled = false;
         let camTl = gsap.timeline({
@@ -1121,16 +1121,17 @@ if (!model_wrapper != undefined) {
         camTl
           .to(controls.target, { x: pos.x, y: pos.y, z: pos.z, })
           .to(camera.position, {
-            x: rotate ? pos.x + 5 : pos.x,
-            y: pos.y,
+            x: rotate ? pos.x + 12 : pos.x,
+            y: pos.y +3.5,
             z: pos.z + zoomOutFactor,
           }, "<")
           .to(controls, {
             minDistance: zoomOutFactor,
-            minPolarAngle: rotate ? Math.PI / 1.5 : Math.PI / 2,
-            maxPolarAngle: rotate ? Math.PI / 1.5 : Math.PI / 2,
-            minAzimuthAngle: - Math.PI / 2.5,
-            maxAzimuthAngle: Math.PI / 2.5,
+            maxDistance: 35,
+            minPolarAngle: rotate ? Math.PI / 1.5 : Math.PI / 4,
+            maxPolarAngle: rotate ? Math.PI / 1.5 : Math.PI / 1.7,
+            minAzimuthAngle: - Math.PI / 4,
+            maxAzimuthAngle: Math.PI / 3,
           }, "<");
       }
     };
