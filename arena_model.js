@@ -1,7 +1,33 @@
+// import * as THREE from 'three';
+// import { OrbitControls } from 'addons/controls/OrbitControls.js';
+// import { CSS2DRenderer, CSS2DObject } from 'addons/renderers/CSS2DRenderer.js';
+// import { GUI } from 'addons/libs/lil-gui.module.min.js';
+// import { GLTFLoader } from 'addons/loaders/GLTFLoader.js';
+// import { EffectComposer } from 'addons/postprocessing/EffectComposer.js';
+// import { RenderPass } from 'addons/postprocessing/RenderPass.js';
+// import { ShaderPass } from 'addons/postprocessing/ShaderPass.js';
+// import { BloomPass } from 'addons/postprocessing/BloomPass.js';
+// import { FilmPass } from 'addons/postprocessing/FilmPass.js';
+// import Stats from 'addons/libs/stats.module.js';
+// import { FocusShader } from 'addons/shaders/FocusShader.js';
+
 const model_wrapper = document.querySelector('.model_wrapper');
 if (!model_wrapper != undefined) {
+  //UI
   const container = model_wrapper.querySelector('.canvas_area');
   const modelViewer = model_wrapper.querySelector('.enable_model');
+
+  //add tooltip
+  const tooltip = document.createElement('div');
+  tooltip.classList.add('info_tooltip');
+  container.appendChild(tooltip);
+
+  //info modal
+  const info_modal = container.querySelector('.arena_modal');
+
+  //reset button
+  const resetCam = container.querySelector(".reset");
+
   window.addEventListener("DOMContentLoaded", modelApp);
   modelViewer.addEventListener("click", function () {
     // modelApp();
@@ -51,9 +77,11 @@ if (!model_wrapper != undefined) {
     var world = new THREE.Object3D();
     const model = {
       loaded: false,
-      src: "https://soumya-webskitters-pal.github.io/nextgen/model.glb",
+      src: "https://soumya-webskitters-pal.github.io/nextgen/model_new.glb",
+      // src: "model_new.glb",
       // envMap: textureLoader.load("https://soumya-webskitters-pal.github.io/nextgen/texture/env_map.webp"),
       element: {
+        vrGradient: textureLoader.load("texture/vr_gradient.webp"),
         wall: {
           name: "room",
           color: ["#0d0d0d", "#3d3530"],
@@ -200,68 +228,40 @@ if (!model_wrapper != undefined) {
       }
     };
 
-    const cameraResetPos = new THREE.Vector3(0, 18.5, 45);
-    const lookAt = new THREE.Vector3(0, 1.5, 0);
+    const cameraResetPos = new THREE.Vector3(-18, 4.5, 22);
+    // const lookAt = new THREE.Vector3(0, 0, 0);
     var interactiveMeshes = [];
     let zoomed = false;
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
     const mousePxPositionOnClickStart = new THREE.Vector2();
 
-    //UI
-    //add tooltip
-    const tooltip = document.createElement('div');
-    tooltip.classList.add('info_tooltip');
-    container.appendChild(tooltip);
     let xSetter = gsap.quickSetter(tooltip, "x", "px");
     let ySetter = gsap.quickSetter(tooltip, "y", "px");
 
-    //info modal
-    const info_modal = container.querySelector('.arena_modal');
-
-    //reset button
-    const resetCam = container.querySelector(".reset")
-
     //add bg color
     scene.background = new THREE.Color('#000000');
-    controls.enabled = false;
-
-
-    function controlCameraRange() {
-      controls.enabled = true;
-      controls.target.set(0, 0, 0);
-      controls.enableRotate = true;
-      controls.enableDamping = true;
-      controls.enableZoom = true;
-      controls.enablePan = true;
-      controls.minDistance = 10;
-      controls.maxDistance = 45;
-      controls.minPolarAngle = Math.PI / 2.61;
-      controls.maxPolarAngle = Math.PI / 2.1;
-      controls.minAzimuthAngle = - Math.PI / 4.5;
-      controls.maxAzimuthAngle = Math.PI / 3;
-    }
-
+    // controls.enabled = false;
 
     //// reset camera
-    function resetCamera() {
-      camera.aspect = sizes.width / sizes.height;
-      camera.updateProjectionMatrix();
-      camera.position.set(cameraResetPos.x, cameraResetPos.y, cameraResetPos.z);
-      camera.rotation.set(0, 0, 0);
-      camera.lookAt(lookAt.x, lookAt.y, lookAt.z);
-      lookAt.x = camera.position.x;
-      lookAt.y = camera.position.y;
-      lookAt.z = camera.position.z;
-      controlCameraRange();
-    }
+    camera.aspect = sizes.width / sizes.height;
+    camera.updateProjectionMatrix();
+    controls.enabled = true;
+    controls.enableRotate = true;
+    controls.enableDamping = true;
+    controls.enableZoom = true;
+    controls.enablePan = true;
+    controls.minDistance = 10;
+    controls.maxDistance = 45;
+    controls.minPolarAngle = Math.PI / 2.61;
+    controls.maxPolarAngle = Math.PI / 2.1;
+    controls.minAzimuthAngle = - Math.PI / 4.5;
+    controls.maxAzimuthAngle = Math.PI / 3;
 
     function init() {
       gsap.set(container, {
         pointerEvents: "none",
       });
-
-      resetCamera();
 
       renderer.setSize(sizes.width, sizes.height);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -278,6 +278,9 @@ if (!model_wrapper != undefined) {
       loadModel();
       addLight();
       renderScene();
+
+      //camera
+      // zoomInTimeline(cameraResetPos, true, true);
     }
 
 
@@ -301,15 +304,13 @@ if (!model_wrapper != undefined) {
             opacity: 0,
             pointerEvents: "none",
           });
-        
         },
       });
 
       resetCam.addEventListener("click", () => {
         gsap.to(resetCam, { opacity: 0, pointerEvents: "none", duration: 0.5 });
         controls.enabled = true;
-        controlCameraRange();
-        resetCamera();
+        zoomInTimeline(cameraResetPos, true, true);
         info_modal.querySelectorAll('.modal_data').forEach((e, i) => {
           e.dataset.id == "arena" ? e.classList.add('show') : e.classList.remove('show');
         });
@@ -337,7 +338,7 @@ if (!model_wrapper != undefined) {
           addTexture();
           model.loaded = true;
           enableSetup();
-          // console.log("world:", world);
+          console.log("world:", world);
         },
         function (xhr) { },
         function (error) {
@@ -393,7 +394,8 @@ if (!model_wrapper != undefined) {
       var heaterLight = new THREE.Group();
       var heaterLight1 = GlowLight({ w: 6.0, h: 0.01 }, { color1: model.heaterLight.color[0], color2: model.heaterLight.color[1] }, 0.3, 0.99);
       heaterLight1.name = 'heaterLight';
-      heaterLight1.position.set(11.25, 15.55, 7.2);
+      // heaterLight1.position.set(11.25, 15.55, 7.2);
+      heaterLight1.position.set(11.25, 10.665, 7.2);
       var heaterLight2 = heaterLight1.clone();
       heaterLight2.position.z = heaterLight2.position.z - 0.34;
       heaterLight.add(heaterLight1, heaterLight2)
@@ -465,7 +467,7 @@ if (!model_wrapper != undefined) {
       return pillerLightGroup;
     }
 
-    function GlowLight(dimention, colors, step, spread) {
+    function GlowLight(dimention, colors, step, spread, map = false) {
       var glowLight = new THREE.Group();
       glowLight.position.x = 0;
       glowLight.position.y = step;
@@ -474,9 +476,11 @@ if (!model_wrapper != undefined) {
         glowLight.add(new THREE.Mesh(
           new THREE.BoxGeometry(dimention.w, dimention.h, 0.1 + i * i / spread),
           new THREE.MeshLambertMaterial({
+            side: THREE.FrontSide,
             color: i < 0.15 ? colors.color1 : colors.color2,
             transparent: true,
-            opacity: 1 - Math.pow(i, step)
+            opacity: 1 - Math.pow(i, step),
+            // alphaMap: map ? map : null
           })
         ));
       }
@@ -502,21 +506,82 @@ if (!model_wrapper != undefined) {
 
     //// add texture
     //////////////////////
+
+    //add 2d text
+    function addText(text, textOptions) {
+      const option = {
+        font: textOptions.font || "Arial",
+        size: textOptions.size || 20,
+        weight: textOptions.weight || "regular",
+        align: textOptions.align || "center",
+        vAlign: textOptions.vAlign || "middle",
+        color: textOptions.color || "#ff0000",
+      };
+      const c = document.createElement('canvas');
+      c.style.cssText = `
+      position: absolute;
+      z-index: 22;
+      top: 50px;
+      left: 50px;`;
+      c.width = 1024; c.height = 1024;
+      const ctx = c.getContext('2d');
+      ctx.font = `${option.size}px ${option.font}`;
+      ctx.textAlign = option.align;
+      ctx.textBaseline = option.vAlign;
+      ctx.fillStyle = option.color;
+      let metrics = ctx.measureText(text);
+      // ctx.font ="regular 500px Arial" //`${option.weight} ${option.size}px ${option.font}`;
+      // console.log(metrics);
+      var textWidth = metrics.width;
+      var textHeight = option.size;
+      //  console.log(textWidth, textHeight);
+      ctx.fillText(text, textWidth / 2, c.height / 2 + textHeight / 2);
+
+      let txtBox = new THREE.Group();
+      var textTexture = new THREE.Texture(c);
+      textTexture.needsUpdate = true;
+      // console.log(textTexture);
+      textTexture.wrapS = THREE.RepeatWrapping;
+      textTexture.wrapT = THREE.RepeatWrapping;
+      var textMaterial = new THREE.MeshPhongMaterial({
+        map: textTexture,
+        transparent: true,
+        side: THREE.FrontSide,
+        alphaMap: textTexture,
+        displacementMap: textTexture,
+        normalMap: textTexture,
+        bumpMap: textTexture,
+        emmissive: option.color,
+        //useScreenCoordinates: false
+      });
+      // console.log(textMaterial);
+      let textTxt = new THREE.Mesh(new THREE.PlaneGeometry(8, 5, 10, 10), textMaterial);
+      let textTxt2 = textTxt.clone();
+      textTxt2.position.set(-4, 0, 0);
+      textTxt2.rotation.set(0, -Math.PI, 0);
+      txtBox.add(textTxt, textTxt2);
+
+      return txtBox;
+      // container.appendChild(c);
+    }
+
+
     function addTexture() {
       let elm = model.element;
 
       //add texture to room
-      let roomMat = new THREE.MeshStandardMaterial({
-        side: THREE.DoubleSide,
-        color: elm.wall.color[0],
-        emissive: elm.wall.color[1],
-        // envMap: elm.envMap, 
-        roughness: 0.55,
-        metalness: 0.35,
-        emissiveIntensity: 0.05,
-      });
+      let roomMat =
+        new THREE.MeshStandardMaterial({
+          side: THREE.DoubleSide,
+          color: elm.wall.color[0],
+          emissive: elm.wall.color[1],
+          emissiveIntensity: 0.05,
+          roughness: 0.55,
+          metalness: 0.35,
+        });
       let roomObj = world.getObjectByName(elm.wall.name);
       roomObj.receiveShadow = true;
+      roomObj.matrixAutoUpdate = false;
       roomObj.material = roomMat;
       // console.log("room:", roomObj);
 
@@ -532,7 +597,7 @@ if (!model_wrapper != undefined) {
         emissiveIntensity: 0.05,
       });
       let baseFloor = new THREE.Mesh(new THREE.PlaneGeometry(125.5, 60.5), baseFloorMat);
-      baseFloor.name = elm.floor.name;
+      baseFloor.name = elm.floor.name + "base";
       baseFloor.receiveShadow = true;
       baseFloor.position.set(0, 0.08, 20);
       baseFloor.rotation.x = Math.PI / 2;
@@ -563,7 +628,7 @@ if (!model_wrapper != undefined) {
       floorMat.map.magFilter = THREE.NearestFilter;
       // floorMat.map.encoding = THREE.sRGBEncoding;
       let floor = new THREE.Mesh(new THREE.PlaneGeometry(44.5, 24.5), floorMat);
-      floor.name = elm.floor.name;
+      floor.name = elm.floor.name + "cage";
       floor.receiveShadow = true;
       // floor.castShadow = true;
       floor.position.set(0, 0.1, 7.5);
@@ -572,6 +637,48 @@ if (!model_wrapper != undefined) {
       // console.log("floor:", floor);
       // createInteractiveMeshes(elm.floor);
 
+
+      //create stage area line
+      //create v-line
+      const arenaLine = new THREE.Group();
+      arenaLine.name = "arenaLine";
+      let _line = GlowLight({ w: 44.5, h: 0.01 }, { color1: model.theme.color, color2: model.theme.color }, 0.05, 0.75, elm.vrGradient);
+      _line.position.set(0, 0.1, 20.5);
+      arenaLine.add(_line);
+      //add arrow
+      let _cone = new THREE.Mesh(new THREE.ConeGeometry(0.08, 0.25, 10), new THREE.MeshBasicMaterial({ color: model.theme.color }));
+      _cone.position.set(-22.3, 0.1, 20.5);
+      _cone.rotation.set(Math.PI / 2, 0, Math.PI / 2);
+      arenaLine.add(_cone);
+      let _cone2 = _cone.clone();
+      _cone2.position.set(22.3, 0.1, 20.5);
+      _cone2.rotation.set(Math.PI / 2, 0, -Math.PI / 2);
+      arenaLine.add(_cone2);
+      //create text
+      let _text = addText("250 ft", { size: 150, color: model.theme.color });
+      _text.position.set(-10, 1, 20.5);
+      arenaLine.add(_text);
+
+      ////create h-line
+      _line = GlowLight({ w: 24.5, h: 0.01 }, { color1: model.theme.color, color2: model.theme.color }, 0.05, 0.75, elm.vrGradient);
+      _line.position.set(-22.8, 0.1, 7.5);
+      _line.rotation.set(0, Math.PI / 2, 0);
+      arenaLine.add(_line);
+      //add arrow
+      _cone = new THREE.Mesh(new THREE.ConeGeometry(0.08, 0.25, 10), new THREE.MeshBasicMaterial({ color: model.theme.color }));
+      _cone.position.set(-22.8, 0.1, 19.8);
+      _cone.rotation.set(Math.PI / 2, 0, 0);
+      arenaLine.add(_cone);
+      _cone2 = _cone.clone();
+      _cone2.position.set(-22.8, 0.1, -4.5);
+      _cone2.rotation.set(-Math.PI / 2, 0, 0);
+      arenaLine.add(_cone2);
+      // //create text
+      _text = addText("150 ft", { size: 150, color: model.theme.color });
+      _text.position.set(-22.8, 1, 15.5);
+      _text.rotation.set(0, -Math.PI / 2, 0);
+      arenaLine.add(_text);
+      scene.add(arenaLine);
 
       //add texture to stage cage
       let stageMat = new THREE.MeshStandardMaterial({
@@ -587,26 +694,26 @@ if (!model_wrapper != undefined) {
       let stageCageObj = world.getObjectByName(elm.cage.name);
       stageCageObj.castShadow = true;
       stageCageObj.receiveShadow = false;
+      stageCageObj.matrixAutoUpdate = false;
       stageCageObj.material = stageMat;
-      console.log("stageCage:", stageCageObj.material);
+      // console.log("stageCage:", stageCageObj.material);
 
 
       //add color to stage poster area
-      let posterBoxMat = new THREE.MeshStandardMaterial({
+      let posterBoxMat = new THREE.MeshBasicMaterial({
         side: THREE.DoubleSide,
         color: elm.poster.color,
-        roughness: 1,
-        metalness: 0,
       });
       elm.poster.name.map((poster, i) => {
         let posterObj = world.getObjectByName(poster);
         posterObj.material = posterBoxMat;
+        posterObj.matrixAutoUpdate = false;
         // console.log("poster:", posterObj);
       });
 
 
       //poster texture
-      let posterMat = new THREE.MeshStandardMaterial({
+      let posterMat = new THREE.MeshBasicMaterial({
         side: THREE.FrontSide,
         roughness: 1,
         metalness: 0,
@@ -638,6 +745,7 @@ if (!model_wrapper != undefined) {
       let cameraObj = world.getObjectByName(elm.camera.name);
       cameraObj.castShadow = false;
       cameraObj.receiveShadow = false;
+      cameraObj.matrixAutoUpdate = false;
       cameraObj.material = camMat;
       // console.log("camera:", cameraObj);
       createInteractiveMeshes(elm.camera);
@@ -653,6 +761,7 @@ if (!model_wrapper != undefined) {
       let fanObj = world.getObjectByName(elm.fan.name);
       fanObj.castShadow = false;
       fanObj.receiveShadow = false;
+      fanObj.matrixAutoUpdate = false;
       fanObj.material = fanMat;
       //console.log("fan:", fanObj);
       createInteractiveMeshes(elm.fan);
@@ -668,9 +777,10 @@ if (!model_wrapper != undefined) {
       let wheelObj = world.getObjectByName(elm.metalwheel.name);
       wheelObj.castShadow = true;
       wheelObj.receiveShadow = false;
+      wheelObj.matrixAutoUpdate = false;
       wheelObj.material = wheelMat;
       //console.log("wheel:", wheelObj);
-      createInteractiveMeshes(elm.metalwheel);
+      // createInteractiveMeshes(elm.metalwheel);
 
 
       //add texture to box
@@ -689,10 +799,11 @@ if (!model_wrapper != undefined) {
       let boxObj = world.getObjectByName(elm.box.name);
       boxObj.castShadow = true;
       boxObj.receiveShadow = false;
+      boxObj.matrixAutoUpdate = false;
       boxObj.material = boxMat;
       boxObj.material.map.repeat.set(1.5, 3.85);
       // console.log("box:", boxObj);
-      createInteractiveMeshes(elm.box);
+      // createInteractiveMeshes(elm.box);
 
 
       //add texture to heat unit
@@ -706,8 +817,27 @@ if (!model_wrapper != undefined) {
       heatObj.material = heatMat;
       heatObj.castShadow = false;
       heatObj.receiveShadow = false;
-      //console.log("heatbox:", heatObj);
+      // heatObj.position.set(0, 5, 0);
+      heatObj.matrixAutoUpdate = false;
+      // console.log("heatbox:", heatObj);
       createInteractiveMeshes(elm.heatbox);
+
+
+      //add texture to heatBox rope
+      // pCylinder4,pCylinder5,pCylinder6,pCylinder7
+      let heatRopeMat = new THREE.MeshStandardMaterial({
+        side: THREE.DoubleSide,
+        color: "#000000",
+        roughness: 0.25,
+        metalness: 0.85,
+      });
+      for (let i = 4; i <= 7; i++) {
+        let heatRopeObj = world.getObjectByName(`pCylinder${i}`);
+        heatRopeObj.material = heatRopeMat;
+        heatRopeObj.castShadow = false;
+        heatRopeObj.receiveShadow = false;
+        heatRopeObj.matrixAutoUpdate = false;
+      }
 
 
       //add texture to sensor unit
@@ -724,6 +854,7 @@ if (!model_wrapper != undefined) {
       elm.sensorBody.name.map((sensorOBJS, i) => {
         let sensorObj = world.getObjectByName(sensorOBJS);
         sensorObj.castShadow = true;
+        sensorObj.matrixAutoUpdate = false;
         sensorObj.material = sensorBodyMat;
         // console.log(sensorObj);
         createInteractiveMeshes({
@@ -741,6 +872,7 @@ if (!model_wrapper != undefined) {
       elm.sensorCap.name.map((sensorOBJS, i) => {
         let sensorObj = world.getObjectByName(sensorOBJS);
         sensorObj.castShadow = true;
+        sensorObj.matrixAutoUpdate = false;
         sensorObj.material = sensorCapMat;
         // console.log(sensorObj);
         createInteractiveMeshes({
@@ -763,209 +895,244 @@ if (!model_wrapper != undefined) {
       screenMat.map.repeat.set(1.5, 1.5);
       let screenObj = world.getObjectByName(elm.screen.name);
       screenObj.material = screenMat;
+      screenObj.matrixAutoUpdate = false;
       // console.log(screenObj.material);
-      createInteractiveMeshes(elm.screen);
+      // createInteractiveMeshes(elm.screen);
 
-
-      //add gun texture
-      let gunMat = new THREE.MeshStandardMaterial({
-        side: THREE.FrontSide,
-        color: elm.screen.color,
-        roughness: 0.35,
-        metalness: 0.45,
-        map: elm.gun.map,
-        bumpMap: elm.gun.bumpMap,
-        bumpScale: 0.15,
-      });
-      gunMat.map.wrapS = THREE.ClampToEdgeWrapping;
-      gunMat.map.wrapT = THREE.ClampToEdgeWrapping;
-      // gunMat.map.repeat.set(1.5, 1.5);
-      gunMat.map.flipY = false;
-      gunMat.map.magFilter = THREE.NearestFilter;
-      // gunMat.map.encoding = THREE.sRGBEncoding;
-      gunMat.needsUpdate = true;
-      let gunObj = world.getObjectByName(elm.gun.name);
-      gunObj.material = gunMat;
-      gunObj.castShadow = true;
-      // console.log(gunObj);
-      createInteractiveMeshes(elm.gun);
-
-
-
-      //add texture to girls
-      let womenOBJS = world.getObjectByName(elm.women.name);
-      // console.log(womenOBJS.children);
-
-      let w_acc = womenOBJS.children[0];
-      w_acc.castShadow = true;
-      // console.log(w_acc);
-      w_acc.material = new THREE.MeshStandardMaterial({
-        color: elm.women.maps[0].color,
-        metalness: 0.85,
-        roughness: 0.15,
-      });
-
-      let w_bdy = womenOBJS.children[1];
-      w_bdy.castShadow = true;
-      // console.log(w_bdy);
-      w_bdy.material = new THREE.MeshStandardMaterial({
-        map: elm.women.maps[1].texture,
-        metalness: 0.35,
-        roughness: 0.45,
-        color: elm.women.maps[1].color,
-        emissiveMap: elm.women.maps[1].texture,
-      });
-      w_bdy.material.map.wrapS = THREE.ClampToEdgeWrapping;
-      w_bdy.material.map.wrapT = THREE.ClampToEdgeWrapping;
-      // w_bdy.material.map.repeat.set(1.5, 1.5);
-      w_bdy.material.map.flipY = false;
-      w_bdy.material.map.magFilter = THREE.NearestFilter;
-      w_bdy.material.needsUpdate = true;
-
-      let w_clth = womenOBJS.children[2];
-      w_clth.castShadow = true;
-      // console.log(w_clth);
-      w_clth.material = new THREE.MeshStandardMaterial({
-        map: elm.women.maps[2].texture,
-        metalness: 0.25,
-        roughness: 0.45,
-        color: elm.women.maps[2].color,
-        bumpMap: elm.women.maps[2].texture,
-        bumpScale: 0.05,
-      });
-      w_clth.material.map.wrapS = THREE.ClampToEdgeWrapping;
-      w_clth.material.map.wrapT = THREE.ClampToEdgeWrapping;
-      w_clth.material.map.flipY = false;
-      w_clth.material.map.magFilter = THREE.NearestFilter;
-      w_clth.material.needsUpdate = true;
-
-      let w_eye = womenOBJS.children[3];
-      w_eye.castShadow = true;
-      // console.log(w_eye);
-      w_eye.material = new THREE.MeshStandardMaterial({
-        map: elm.women.maps[3].texture,
-        emissiveMap: elm.women.maps[3].texture,
-      });
-      w_eye.material.map.wrapS = THREE.ClampToEdgeWrapping;
-      w_eye.material.map.wrapT = THREE.ClampToEdgeWrapping;
-      w_eye.material.map.flipY = false;
-      w_eye.material.map.magFilter = THREE.NearestFilter;
-      w_eye.material.needsUpdate = true;
-
-      let w_hir = womenOBJS.children[5];
-      w_hir.castShadow = true;
-      // console.log(w_hir);
-      w_hir.material = new THREE.MeshStandardMaterial({
-        color: elm.women.maps[4].color,
-        metalness: 0,
-        roughness: 1,
-      });
-
-
-
-      //add texture to boys
-      let menOBJS = world.getObjectByName(elm.men.name);
-      // console.log(menOBJS.children);
-
-      let m_bdy = menOBJS.children[0];
-      m_bdy.castShadow = true;
-      // console.log(m_bdy);
-      m_bdy.material = new THREE.MeshStandardMaterial({
-        map: elm.men.maps[0].texture,
-        metalness: 0.45,
-        roughness: 0.45,
-        emissiveMap: elm.men.maps[0].texture,
-      });
-      m_bdy.material.map.wrapS = THREE.ClampToEdgeWrapping;
-      m_bdy.material.map.wrapT = THREE.ClampToEdgeWrapping;
-      m_bdy.material.map.flipY = false;
-      m_bdy.material.map.magFilter = THREE.NearestFilter;
-      m_bdy.material.needsUpdate = true;
-
-      let m_eye = menOBJS.children[1];
-      m_eye.castShadow = true;
-      // console.log(m_eye);
-      m_eye.material = new THREE.MeshStandardMaterial({
-        map: elm.men.maps[1].texture,
-        emissiveMap: elm.men.maps[1].texture,
-      });
-      m_eye.material.map.wrapS = THREE.ClampToEdgeWrapping;
-      m_eye.material.map.wrapT = THREE.ClampToEdgeWrapping;
-      m_eye.material.map.flipY = false;
-      m_eye.material.map.magFilter = THREE.NearestFilter;
-      m_eye.material.needsUpdate = true;
-
-      let m_hd = menOBJS.children[2];
-      m_hd.castShadow = true;
-      // console.log(m_hd);
-      m_hd.material = new THREE.MeshStandardMaterial({
-        map: elm.men.maps[2].texture,
-        emissiveMap: elm.men.maps[2].texture,
-      });
-      m_hd.material.map.wrapS = THREE.ClampToEdgeWrapping;
-      m_hd.material.map.wrapT = THREE.ClampToEdgeWrapping;
-      m_hd.material.map.flipY = false;
-      m_hd.material.map.magFilter = THREE.NearestFilter;
-      m_hd.material.needsUpdate = true;
-
-      let m_leg = menOBJS.children[3];
-      m_leg.castShadow = true;
-      // console.log(m_leg);
-      m_leg.material = new THREE.MeshStandardMaterial({
-        map: elm.men.maps[3].texture,
-        metalness: 0.15,
-        roughness: 0.65,
-        color: elm.men.maps[3].color,
-        bumpMap: elm.men.maps[3].texture,
-        bumpScale: 0.15,
-      });
-      m_leg.material.map.wrapS = THREE.ClampToEdgeWrapping;
-      m_leg.material.map.wrapT = THREE.ClampToEdgeWrapping;
-      m_leg.material.map.flipY = false;
-      m_leg.material.map.magFilter = THREE.NearestFilter;
-      m_leg.material.needsUpdate = true;
-
-
-      let menOBJS2 = menOBJS.clone();
-      menOBJS2.position.set(0, 0, 0);
-      menOBJS2.name = "men2";
-      scene.add(menOBJS2);
-      // console.log(menOBJS2);
+      /*
+            //add gun texture
+            let gunMat = new THREE.MeshStandardMaterial({
+              side: THREE.FrontSide,
+              color: elm.screen.color,
+              roughness: 0.35,
+              metalness: 0.45,
+              map: elm.gun.map,
+              bumpMap: elm.gun.bumpMap,
+              bumpScale: 0.15,
+            });
+            gunMat.map.wrapS = THREE.ClampToEdgeWrapping;
+            gunMat.map.wrapT = THREE.ClampToEdgeWrapping;
+            // gunMat.map.repeat.set(1.5, 1.5);
+            gunMat.map.flipY = false;
+            gunMat.map.magFilter = THREE.NearestFilter;
+            // gunMat.map.encoding = THREE.sRGBEncoding;
+            // gunMat.needsUpdate = true;
+            gunMat.matrixAutoUpdate = false;
+            let gunObj = world.getObjectByName(elm.gun.name);
+            gunObj.material = gunMat;
+            gunObj.castShadow = true;
+            // console.log(gunObj);
+            // createInteractiveMeshes(elm.gun);
+      
+      
+      
+            //add texture to girls
+            let womenOBJS = world.getObjectByName(elm.women.name);
+            // console.log(womenOBJS.children);
+      
+            let w_acc = womenOBJS.children[0];
+            w_acc.castShadow = true;
+            // w_acc.matrixAutoUpdate = false;
+            // console.log(w_acc);
+            w_acc.material = new THREE.MeshStandardMaterial({
+              color: elm.women.maps[0].color,
+              metalness: 0.85,
+              roughness: 0.15,
+            });
+      
+            let w_bdy = womenOBJS.children[1];
+            w_bdy.castShadow = true;
+            // w_bdy.matrixAutoUpdate = false;
+            // console.log(w_bdy);
+            w_bdy.material = new THREE.MeshStandardMaterial({
+              map: elm.women.maps[1].texture,
+              metalness: 0.35,
+              roughness: 0.45,
+              color: elm.women.maps[1].color,
+              emissiveMap: elm.women.maps[1].texture,
+            });
+            w_bdy.material.map.wrapS = THREE.ClampToEdgeWrapping;
+            w_bdy.material.map.wrapT = THREE.ClampToEdgeWrapping;
+            // w_bdy.material.map.repeat.set(1.5, 1.5);
+            w_bdy.material.map.flipY = false;
+            w_bdy.material.map.magFilter = THREE.NearestFilter;
+            // w_bdy.material.needsUpdate = true;
+      
+            let w_clth = womenOBJS.children[2];
+            w_clth.castShadow = true;
+            // w_clth.matrixAutoUpdate = false;
+            // console.log(w_clth);
+            w_clth.material = new THREE.MeshStandardMaterial({
+              map: elm.women.maps[2].texture,
+              metalness: 0.25,
+              roughness: 0.45,
+              color: elm.women.maps[2].color,
+              bumpMap: elm.women.maps[2].texture,
+              bumpScale: 0.05,
+            });
+            w_clth.material.map.wrapS = THREE.ClampToEdgeWrapping;
+            w_clth.material.map.wrapT = THREE.ClampToEdgeWrapping;
+            w_clth.material.map.flipY = false;
+            w_clth.material.map.magFilter = THREE.NearestFilter;
+            // w_clth.material.needsUpdate = true;
+      
+            let w_eye = womenOBJS.children[3];
+            w_eye.castShadow = true;
+            // w_eye.matrixAutoUpdate = false;
+            // console.log(w_eye);
+            w_eye.material = new THREE.MeshStandardMaterial({
+              map: elm.women.maps[3].texture,
+              emissiveMap: elm.women.maps[3].texture,
+            });
+            w_eye.material.map.wrapS = THREE.ClampToEdgeWrapping;
+            w_eye.material.map.wrapT = THREE.ClampToEdgeWrapping;
+            w_eye.material.map.flipY = false;
+            w_eye.material.map.magFilter = THREE.NearestFilter;
+            // w_eye.material.needsUpdate = true;
+      
+            let w_hir = womenOBJS.children[5];
+            w_hir.castShadow = true;
+            // w_hir.matrixAutoUpdate = false;
+            // console.log(w_hir);
+            w_hir.material = new THREE.MeshStandardMaterial({
+              color: elm.women.maps[4].color,
+              metalness: 0,
+              roughness: 1,
+            });
+      
+      
+            //add texture to boys
+            let menOBJS = world.getObjectByName(elm.men.name);
+            // console.log(menOBJS.children);
+      
+            let m_bdy = menOBJS.children[0];
+            m_bdy.castShadow = true;
+            // m_bdy.matrixAutoUpdate = false;
+            // console.log(m_bdy);
+            m_bdy.material = new THREE.MeshStandardMaterial({
+              map: elm.men.maps[0].texture,
+              metalness: 0.45,
+              roughness: 0.45,
+              emissiveMap: elm.men.maps[0].texture,
+            });
+            m_bdy.material.map.wrapS = THREE.ClampToEdgeWrapping;
+            m_bdy.material.map.wrapT = THREE.ClampToEdgeWrapping;
+            m_bdy.material.map.flipY = false;
+            m_bdy.material.map.magFilter = THREE.NearestFilter;
+            // m_bdy.material.needsUpdate = true;
+      
+            let m_eye = menOBJS.children[1];
+            m_eye.castShadow = true;
+            // m_eye.matrixAutoUpdate = false;
+            // console.log(m_eye);
+            m_eye.material = new THREE.MeshStandardMaterial({
+              map: elm.men.maps[1].texture,
+              emissiveMap: elm.men.maps[1].texture,
+            });
+            m_eye.material.map.wrapS = THREE.ClampToEdgeWrapping;
+            m_eye.material.map.wrapT = THREE.ClampToEdgeWrapping;
+            m_eye.material.map.flipY = false;
+            m_eye.material.map.magFilter = THREE.NearestFilter;
+            // m_eye.material.needsUpdate = true;
+      
+            let m_hd = menOBJS.children[2];
+            m_hd.castShadow = true;
+            // m_hd.matrixAutoUpdate = false;
+            // console.log(m_hd);
+            m_hd.material = new THREE.MeshStandardMaterial({
+              map: elm.men.maps[2].texture,
+              emissiveMap: elm.men.maps[2].texture,
+            });
+            m_hd.material.map.wrapS = THREE.ClampToEdgeWrapping;
+            m_hd.material.map.wrapT = THREE.ClampToEdgeWrapping;
+            m_hd.material.map.flipY = false;
+            m_hd.material.map.magFilter = THREE.NearestFilter;
+            // m_hd.material.needsUpdate = true;
+      
+            let m_leg = menOBJS.children[3];
+            m_leg.castShadow = true;
+            // m_leg.matrixAutoUpdate = false;
+            // console.log(m_leg);
+            m_leg.material = new THREE.MeshStandardMaterial({
+              map: elm.men.maps[3].texture,
+              metalness: 0.15,
+              roughness: 0.65,
+              color: elm.men.maps[3].color,
+              bumpMap: elm.men.maps[3].texture,
+              bumpScale: 0.15,
+            });
+            m_leg.material.map.wrapS = THREE.ClampToEdgeWrapping;
+            m_leg.material.map.wrapT = THREE.ClampToEdgeWrapping;
+            m_leg.material.map.flipY = false;
+            m_leg.material.map.magFilter = THREE.NearestFilter;
+            // m_leg.material.needsUpdate = true;*/
     }
+
 
     //// interaction
     //////////////////////
-    function zoomInTimeline(pos, rotate = false) {
-      let zoomOutFactor = 5;
-      zoomed = true;
-      controls.enabled = false;
-      let camTl = gsap.timeline({
-        defaults: {
-          duration: 1,
-          ease: "linear",
-          onComplete: () => {
-            controls.enabled = true;
-            zoomed = false;
-            controls.enableZoom = false;
-
-            gsap.to(info_modal, { opacity: 1 });
+    function zoomInTimeline(pos, rotate = false, reset = false) {
+      if (reset) {
+        let zoomOutFactor = 0.01;
+        controls.enabled = false;
+        let camTl = gsap.timeline({
+          defaults: {
+            duration: 1,
+            ease: "linear",
+            onComplete: () => {
+              controls.enabled = true;
+              controls.enableZoom = false;
+            }
           }
-        }
-      });
-      camTl
-        .to(controls.target, { x: pos.x, y: pos.y, z: pos.z, })
-        .to(camera.position, {
-          x: rotate ? pos.x + 5 : pos.x,
-          y: pos.y,
-          z: pos.z + zoomOutFactor,
-        }, "<")
-        .to(controls, {
-          minDistance: zoomOutFactor,
-          minPolarAngle: rotate ? Math.PI / 1.5 : Math.PI / 2,
-          maxPolarAngle: rotate ? Math.PI / 1.5 : Math.PI / 2,
-          minAzimuthAngle: - Math.PI / 2.5,
-          maxAzimuthAngle: Math.PI / 2.5,
-        }, "<")
+        });
+        camTl
+          .to(controls.target, { x: pos.x, y: pos.y, z: pos.z, })
+          .to(camera.position, {
+            x: pos.x - zoomOutFactor,
+            y: pos.y,
+            z: pos.z,
+          }, "<")
+          .to(controls, {
+            minDistance: 10,
+            maxDistance: 45,
+            minPolarAngle: Math.PI / 1.9,
+            maxPolarAngle: Math.PI / 1.8,
+            minAzimuthAngle: - Math.PI / 4.5,
+            maxAzimuthAngle: Math.PI / 3,
+          }, "<");
+      }
+      else {
+        let zoomOutFactor = 5;
+        zoomed = true;
+        controls.enabled = false;
+        let camTl = gsap.timeline({
+          defaults: {
+            duration: 1,
+            ease: "linear",
+            onComplete: () => {
+              controls.enabled = true;
+              zoomed = false;
+              controls.enableZoom = false;
+
+              gsap.to(info_modal, { opacity: 1 });
+            }
+          }
+        });
+        camTl
+          .to(controls.target, { x: pos.x, y: pos.y, z: pos.z, })
+          .to(camera.position, {
+            x: rotate ? pos.x + 5 : pos.x,
+            y: pos.y,
+            z: pos.z + zoomOutFactor,
+          }, "<")
+          .to(controls, {
+            minDistance: zoomOutFactor,
+            minPolarAngle: rotate ? Math.PI / 1.5 : Math.PI / 2,
+            maxPolarAngle: rotate ? Math.PI / 1.5 : Math.PI / 2,
+            minAzimuthAngle: - Math.PI / 2.5,
+            maxAzimuthAngle: Math.PI / 2.5,
+          }, "<");
+      }
     };
 
     //get position on mouse move
