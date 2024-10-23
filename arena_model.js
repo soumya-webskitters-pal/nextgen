@@ -1,16 +1,3 @@
-// import * as THREE from 'three';
-// import { OrbitControls } from 'addons/controls/OrbitControls.js';
-// import { CSS2DRenderer, CSS2DObject } from 'addons/renderers/CSS2DRenderer.js';
-// import { GUI } from 'addons/libs/lil-gui.module.min.js';
-// import { GLTFLoader } from 'addons/loaders/GLTFLoader.js';
-// import { EffectComposer } from 'addons/postprocessing/EffectComposer.js';
-// import { RenderPass } from 'addons/postprocessing/RenderPass.js';
-// import { ShaderPass } from 'addons/postprocessing/ShaderPass.js';
-// import { BloomPass } from 'addons/postprocessing/BloomPass.js';
-// import { FilmPass } from 'addons/postprocessing/FilmPass.js';
-// import Stats from 'addons/libs/stats.module.js';
-// import { FocusShader } from 'addons/shaders/FocusShader.js';
-
 const model_wrapper = document.querySelector('.model_wrapper');
 if (!model_wrapper != undefined) {
   //UI
@@ -81,7 +68,7 @@ if (!model_wrapper != undefined) {
       // src: "model_new.glb",
       // envMap: textureLoader.load("https://soumya-webskitters-pal.github.io/nextgen/texture/env_map.webp"),
       element: {
-        vrGradient: textureLoader.load("texture/vr_gradient.webp"),
+        // vrGradient: textureLoader.load("texture/vr_gradient.webp"),
         wall: {
           name: "room",
           color: ["#0d0d0d", "#3d3530"],
