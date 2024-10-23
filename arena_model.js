@@ -298,9 +298,6 @@ if (!model_wrapper != undefined) {
         onComplete: () => {
           loader.remove();
 
-          gsap.to(".nav_list>li", { opacity: 1, yPercent: 0, stagger: 0.05, });
-          loadAnimation();
-
           info_modal.querySelector('.modal_data[data-id="arena"]').classList.add('show');
 
           gsap.set(resetCam, {
