@@ -1,16 +1,3 @@
-// import * as THREE from 'three';
-// import { OrbitControls } from 'addons/controls/OrbitControls.js';
-// import { CSS2DRenderer, CSS2DObject } from 'addons/renderers/CSS2DRenderer.js';
-// import { GUI } from 'addons/libs/lil-gui.module.min.js';
-// import { GLTFLoader } from 'addons/loaders/GLTFLoader.js';
-// import { EffectComposer } from 'addons/postprocessing/EffectComposer.js';
-// import { RenderPass } from 'addons/postprocessing/RenderPass.js';
-// import { ShaderPass } from 'addons/postprocessing/ShaderPass.js';
-// import { BloomPass } from 'addons/postprocessing/BloomPass.js';
-// import { FilmPass } from 'addons/postprocessing/FilmPass.js';
-// import Stats from 'addons/libs/stats.module.js';
-// import { FocusShader } from 'addons/shaders/FocusShader.js';
-
 const model_wrapper = document.querySelector('.model_wrapper');
 if (!model_wrapper != undefined) {
   //UI
@@ -156,6 +143,12 @@ if (!model_wrapper != undefined) {
           click: true,
           text: "Heating unit",
         },
+        heatboxStand: {
+          name: "hit_unit_stand",
+          color: "#000000",
+          click: false,
+          text: "Heating unit wire",
+        },
         metalwheel: {
           name: "metal001",
           color: "#a7a7a7",
@@ -228,7 +221,7 @@ if (!model_wrapper != undefined) {
       }
     };
 
-    const cameraResetPos = new THREE.Vector3(-24, 5, 22);
+    const cameraResetPos = new THREE.Vector3(0, 5, 38);
     // const lookAt = new THREE.Vector3(0, 0, 0);
     var interactiveMeshes = [];
     let zoomed = false;
@@ -251,8 +244,8 @@ if (!model_wrapper != undefined) {
     controls.enableDamping = true;
     controls.enableZoom = true;
     controls.enablePan = true;
-    controls.minDistance = 10;
-    controls.maxDistance = 45;
+    controls.minDistance = 5;
+    controls.maxDistance = 5;
     controls.minPolarAngle = Math.PI / 2.61;
     controls.maxPolarAngle = Math.PI / 2.1;
     controls.minAzimuthAngle = - Math.PI / 4.5;
@@ -824,20 +817,18 @@ if (!model_wrapper != undefined) {
 
 
       //add texture to heatBox rope
-      // pCylinder4,pCylinder5,pCylinder6,pCylinder7
-      let heatRopeMat = new THREE.MeshStandardMaterial({
+      let heatRopeMat = new THREE.MeshBasicMaterial({
         side: THREE.DoubleSide,
-        color: "#000000",
+        color: elm.heatboxStand.color,
         roughness: 0.25,
-        metalness: 0.85,
+        metalness: 0.5,
       });
-      for (let i = 4; i <= 7; i++) {
-        let heatRopeObj = world.getObjectByName(`pCylinder${i}`);
-        heatRopeObj.material = heatRopeMat;
-        heatRopeObj.castShadow = false;
-        heatRopeObj.receiveShadow = false;
-        heatRopeObj.matrixAutoUpdate = false;
-      }
+      let heatRopeObj = world.getObjectByName(elm.heatboxStand.name);
+      heatRopeObj.material = heatRopeMat;
+      heatRopeObj.castShadow = false;
+      heatRopeObj.receiveShadow = false;
+      heatRopeObj.matrixAutoUpdate = false;
+      // console.log("heatbox rope:", heatRopeObj);
 
 
       //add texture to sensor unit
@@ -1081,20 +1072,19 @@ if (!model_wrapper != undefined) {
             ease: "linear",
             onComplete: () => {
               controls.enabled = true;
-              controls.enableZoom = false;
             }
           }
         });
         camTl
-          .to(controls.target, { x: pos.x, y: pos.y - zoomOutFactor / 10, z: pos.z, })
+          .to(controls.target, { x: pos.x, y: pos.y + zoomOutFactor / 10, z: pos.z, })
           .to(camera.position, {
-            x: pos.x - zoomOutFactor,
-            y: pos.y ,
+            x: pos.x,
+            y: pos.y,
             z: pos.z,
           }, "<")
           .to(controls, {
-            minDistance: 10,
-            maxDistance: 45,
+            minDistance: 5,
+            maxDistance: 15,
             minPolarAngle: Math.PI / 3,
             maxPolarAngle: Math.PI / 1.95,
             minAzimuthAngle: - Math.PI / 3.8,
@@ -1122,7 +1112,7 @@ if (!model_wrapper != undefined) {
           .to(controls.target, { x: pos.x, y: pos.y, z: pos.z, })
           .to(camera.position, {
             x: rotate ? pos.x + 12 : pos.x,
-            y: pos.y +3.5,
+            y: pos.y + 3.5,
             z: pos.z + zoomOutFactor,
           }, "<")
           .to(controls, {
