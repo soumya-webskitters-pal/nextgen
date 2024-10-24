@@ -1,8 +1,9 @@
+const hostURL = "https://soumya-webskitters-pal.github.io/nextgen";
 import * as THREE from 'three';
-
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+// import { LightProbeGenerator } from 'three/addons/lights/LightProbeGenerator.js';
 // import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 // import { EffectComposer } from 'addons/postprocessing/EffectComposer.js';
 // import { RenderPass } from 'addons/postprocessing/RenderPass.js';
@@ -73,34 +74,37 @@ if (!model_wrapper != undefined) {
                 antialias: true,
                 alpha: true,
             }),
+            labelRenderer = new CSS2DRenderer(),
             textureLoader = new THREE.TextureLoader(),
-            controls = new OrbitControls(camera, renderer.domElement);
+            // controls = new OrbitControls(camera, renderer.domElement);
+            controls = new OrbitControls(camera, labelRenderer.domElement);
+
 
         var world = new THREE.Object3D();
         const model = {
             loaded: false,
-            src: "https://soumya-webskitters-pal.github.io/nextgen/model_new.glb",
+            src: `${hostURL}/model_new.glb`,
             // src: "model_new.glb",
-            // envMap: textureLoader.load("https://soumya-webskitters-pal.github.io/nextgen/texture/env_map.webp"),
+            // envMap: textureLoader.load(`${hostURL}/texture/env_map.webp`),
             element: {
-                // vrGradient: textureLoader.load("texture/vr_gradient.webp"),
+                // vrGradient: textureLoader.load(`${hostURL}/texture/vr_gradient.webp`),
                 wall: {
                     name: "room",
-                    color: ["#0d0d0d", "#3d3530"],
+                    color: ["#0d0d0d", "#3d3530"],//#1e1e1e
                     click: false,
                     text: "Room",
                 },
                 floor: {
                     name: "floor",
-                    map: textureLoader.load("https://soumya-webskitters-pal.github.io/nextgen/texture/Vr_floor.webp"),
-                    lightMap: textureLoader.load("https://soumya-webskitters-pal.github.io/nextgen/texture/Vr_floor_lightmap.webp"),
+                    map: textureLoader.load(`${hostURL}/texture/Vr_floor.webp`),
+                    lightMap: textureLoader.load(`${hostURL}/texture/Vr_floor_lightmap.webp`),
                     color: ["#fff", "#38383a"],
                     click: false,
                     text: "Arena",
                 },
                 poster: {
                     name: ["poster_1", "poster_2"],
-                    map: textureLoader.load("https://soumya-webskitters-pal.github.io/nextgen/texture/Vr_poster.webp"),
+                    map: textureLoader.load(`${hostURL}/texture/Vr_poster.webp`),
                     color: "#000000",
                     click: false,
                     text: "Poster",
@@ -113,21 +117,21 @@ if (!model_wrapper != undefined) {
                 },
                 camera: {
                     name: "camera",
-                    map: textureLoader.load("https://soumya-webskitters-pal.github.io/nextgen/texture/Vr_camera.webp"),
+                    map: textureLoader.load(`${hostURL}/texture/Vr_camera.webp`),
                     color: "#b1b1b1",
                     click: true,
                     text: "Camera",
                 },
                 box: {
                     name: "box",
-                    map: textureLoader.load("https://soumya-webskitters-pal.github.io/nextgen/texture/Vr_box.webp"),
+                    map: textureLoader.load(`${hostURL}/texture/Vr_box.webp`),
                     color: "#976b3c",
                     click: false,
                     text: "Box",
                 },
                 sensorBody: {
                     name: ["scent_unit_body", "scent_unit_body001"],
-                    map: textureLoader.load("https://soumya-webskitters-pal.github.io/nextgen/texture/Vr_sensor.webp"),
+                    map: textureLoader.load(`${hostURL}/texture/Vr_sensor.webp`),
                     color: "#0f0f0f",
                     click: true,
                     text: "Scent Diffusion",
@@ -140,8 +144,8 @@ if (!model_wrapper != undefined) {
                 },
                 screen: {
                     name: "screen",
-                    map: textureLoader.load("https://soumya-webskitters-pal.github.io/nextgen/texture/Vr_screen.webp"),
-                    lightMap: textureLoader.load("https://soumya-webskitters-pal.github.io/nextgen/texture/Vr_screen_lightmap.webp"),
+                    map: textureLoader.load(`${hostURL}/texture/Vr_screen.webp`),
+                    lightMap: textureLoader.load(`${hostURL}/texture/Vr_screen_lightmap.webp`),
                     color: "#ffffff",
                     click: false,
                     text: "Screen",
@@ -158,6 +162,12 @@ if (!model_wrapper != undefined) {
                     click: true,
                     text: "Heating unit",
                 },
+                heatboxStand: {
+                    name: "hit_unit_stand",
+                    color: "#000000",
+                    click: false,
+                    text: "Heating unit wire",
+                },
                 metalwheel: {
                     name: "metal001",
                     color: "#a7a7a7",
@@ -168,11 +178,11 @@ if (!model_wrapper != undefined) {
                     name: "men_character",
                     maps: [
                         {
-                            name: 'chest', texture: textureLoader.load("https://soumya-webskitters-pal.github.io/nextgen/texture/men/chest.webp"),
+                            name: 'chest', texture: textureLoader.load(`${hostURL}/texture/men/chest.webp`),
                         },
-                        { name: 'eye', texture: textureLoader.load("https://soumya-webskitters-pal.github.io/nextgen/texture/men/eye.webp") },
-                        { name: 'head', texture: textureLoader.load("https://soumya-webskitters-pal.github.io/nextgen/texture/men/head.webp") },
-                        { name: 'leg', texture: textureLoader.load("https://soumya-webskitters-pal.github.io/nextgen/texture/men/leg.webp"), color: "#000000" },
+                        { name: 'eye', texture: textureLoader.load(`${hostURL}/texture/men/eye.webp`) },
+                        { name: 'head', texture: textureLoader.load(`${hostURL}/texture/men/head.webp`) },
+                        { name: 'leg', texture: textureLoader.load(`${hostURL}/texture/men/leg.webp`), color: "#000000" },
                     ],
                     click: false,
                     text: "Player",
@@ -184,12 +194,12 @@ if (!model_wrapper != undefined) {
                             name: 'Accessoires',
                             color: "#000000",
                         },
-                        { name: 'body', color: "#947a69", texture: textureLoader.load("https://soumya-webskitters-pal.github.io/nextgen/texture/girl/body.webp") },
+                        { name: 'body', color: "#947a69", texture: textureLoader.load(`${hostURL}/texture/girl/body.webp`) },
                         {
-                            name: 'Clothing', texture: textureLoader.load("https://soumya-webskitters-pal.github.io/nextgen/texture/girl/cloth.webp"),
+                            name: 'Clothing', texture: textureLoader.load(`${hostURL}/texture/girl/cloth.webp`),
                             color: "#383838",
                         },
-                        { name: 'eyes', texture: textureLoader.load("https://soumya-webskitters-pal.github.io/nextgen/texture/girl/eye.webp") },
+                        { name: 'eyes', texture: textureLoader.load(`${hostURL}/texture/girl/eye.webp`) },
                         { name: 'hair', color: "#000000" },
                     ],
                     click: false,
@@ -197,8 +207,8 @@ if (!model_wrapper != undefined) {
                 },
                 gun: {
                     name: "GUN",
-                    map: textureLoader.load("https://soumya-webskitters-pal.github.io/nextgen/texture/gun.webp"),
-                    bumpMap: textureLoader.load("https://soumya-webskitters-pal.github.io/nextgen/texture/gun_bump.webp"),
+                    map: textureLoader.load(`${hostURL}/texture/gun.webp`),
+                    bumpMap: textureLoader.load(`${hostURL}/texture/gun_bump.webp`),
                     color: "#ffffff",
                     click: false,
                     text: "Gun",
@@ -215,18 +225,26 @@ if (!model_wrapper != undefined) {
             },
             ambient: {
                 color: "#ffffff",
-                intensity: 1
+                intensity: 2.5
             },
             theme: {
                 color: "#00d3ff",
-                intensity: 0.5,
-                map: textureLoader.load('https://soumya-webskitters-pal.github.io/nextgen/texture/lightmap.webp'),
+                intensity: 1,
+                map: textureLoader.load(`${hostURL}/texture/lightmap.webp`),
             },
             shadow: {
                 color: "#000000",
             },
             heaterLight: {
                 color: ["#ff0000", "#ff623e"],
+            },
+            labels: {
+                color: "#00d3ff",
+                size: "1.5vw",
+                weight: "bold",
+                alignment: "center",
+                background: "transparent",
+                text: ["250 ft", "150 ft"]
             }
         };
 
@@ -244,6 +262,7 @@ if (!model_wrapper != undefined) {
         //add bg color
         scene.background = new THREE.Color('#000000');
         controls.enabled = false;
+
 
         //// reset camera
         camera.aspect = sizes.width / sizes.height;
@@ -265,17 +284,31 @@ if (!model_wrapper != undefined) {
                 pointerEvents: "none",
             });
 
+            //3D renderer
             renderer.setSize(sizes.width, sizes.height);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             renderer.shadowMap.enabled = true;
             renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-            renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
-            renderer.toneMapping = THREE.ACESFilmicToneMapping;
-            // renderer.gammaOutput = true;
-            // renderer.gammaFactor = 1.5;
+            THREE.ColorManagement.enabled = true;
+            THREE.ColorManagement.legacyMode = false;
+            // renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
+            renderer.outputColorSpace = THREE.SRGBColorSpace;
+            // renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            // renderer.toneMapping = THREE.ReinhardToneMapping;
+            // renderer.toneMappingExposure = Math.pow(1.98, 1.0);
+
+            renderer.gammaInput = true;
+            renderer.gammaOutput = true;
+            renderer.gammaFactor = 0.08;
 
             // first render
             container.appendChild(renderer.domElement);
+
+            //2d label renderer
+            labelRenderer.setSize(window.innerWidth, window.innerHeight);
+            labelRenderer.domElement.style.position = 'absolute';
+            labelRenderer.domElement.style.top = '0px';
+            container.appendChild(labelRenderer.domElement);
 
             loadModel();
             addLight();
@@ -325,6 +358,7 @@ if (!model_wrapper != undefined) {
                 controls.update();
             }
             renderer.render(scene, camera);
+            labelRenderer.render(scene, camera);
             requestAnimationFrame(renderScene);
         }
 
@@ -353,33 +387,95 @@ if (!model_wrapper != undefined) {
         //////////////////////
         function addLight() {
             //// Env light
-            scene.add(new THREE.AmbientLight(model.ambient.color, 0.5));
+            //  scene.add(new THREE.AmbientLight(model.ambient.color, model.ambient.intensity / 5));
+            // modifyShadow(ambientFrontLight1);
 
-            // ambient front light for shadow
-            const ambientFrontCenterLight = new THREE.SpotLight(model.ambient.color, model.ambient.intensity);
-            ambientFrontCenterLight.name = 'ambientFrontCenterLight';
-            ambientFrontCenterLight.position.set(0, 10, 65);
-            modifyShadow(ambientFrontCenterLight);
-            scene.add(ambientFrontCenterLight);
-            //console.log(ambientFrontCenterLight);
+            ////ambient light - room
+            // ambient front light1 
+            const ambientFrontLight1 = new THREE.DirectionalLight(model.ambient.color, model.ambient.intensity / 5);
+            ambientFrontLight1.name = 'ambientFrontLight1';
+            ambientFrontLight1.position.set(-10.5, 5, 35);
+            ambientFrontLight1.target.position.set(ambientFrontLight1.position.x + 12, ambientFrontLight1.position.y, 0);
+            ambientFrontLight1.castShadow = true;
+            scene.add(ambientFrontLight1);
+            // scene.add(new THREE.DirectionalLightHelper(ambientFrontLight1, 0.5));
+            // console.log(ambientFrontLight1);
 
+            // ambient front light2
+            const ambientFrontLight2 = new THREE.DirectionalLight(model.ambient.color, model.ambient.intensity / 5);
+            ambientFrontLight2.name = 'ambientFrontLight2';
+            ambientFrontLight2.position.set(10.5, 5, 35);
+            ambientFrontLight2.target.position.set(ambientFrontLight2.position.x - 12, ambientFrontLight2.position.y, 0);
+            ambientFrontLight2.castShadow = true;
+            scene.add(ambientFrontLight2);
+            // scene.add(new THREE.DirectionalLightHelper(ambientFrontLight2, 0.5));
+            // console.log(ambientFrontLight2);
+
+            // ambient front light3
+            const ambientFrontLight3 = new THREE.DirectionalLight(model.ambient.color, model.ambient.intensity / 5);
+            ambientFrontLight3.name = 'ambientFrontLight3';
+            ambientFrontLight3.position.set(0, 20, 45);
+            ambientFrontLight3.target.position.set(ambientFrontLight3.position.x, 10, 0);
+            ambientFrontLight3.castShadow = true;
+            scene.add(ambientFrontLight3);
+            // scene.add(new THREE.DirectionalLightHelper(ambientFrontLight3, 0.5));
+            // console.log(ambientFrontLight3);
+
+
+            ////room light
+            // ambient 1
+            const ambientLight1 = new THREE.HemisphereLight(model.ambient.color, model.ambient.color, model.ambient.intensity / 2);
+            ambientLight1.name = 'ambientLight1';
+            ambientLight1.position.set(-50, 8, -5);
+            scene.add(ambientLight1);
+            // scene.add(new THREE.HemisphereLightHelper(ambientLight1, 0.5));
+
+            // ambient 2
+            const ambientLight2 = new THREE.HemisphereLight(model.ambient.color, model.ambient.color, model.ambient.intensity / 2);
+            ambientLight2.name = 'ambientLight2';
+            ambientLight2.position.set(50, 8, -5);
+            scene.add(ambientLight2);
+            // scene.add(new THREE.HemisphereLightHelper(ambientLight2, 0.5));
+
+            // const ambientLight3 = new THREE.DirectionalLight(model.ambient.color,  model.ambient.intensity / 10);
+            // ambientLight3.name = 'ambientLight3';
+            // ambientLight3.position.set(0, 12, 25);
+            // ambientLight3.target.position.set(0, 5, 75);
+            // scene.add(ambientLight3);
+            // scene.add(new THREE.DirectionalLightHelper(ambientLight3, 0.5));
+
+
+            //// celling light
             // ambient light-top 1
-            const ambientLightTop1 = new THREE.PointLight(model.ambient.color, model.ambient.intensity / 2);
+            const ambientLightTop1 = new THREE.DirectionalLight(model.ambient.color, model.ambient.intensity / 4);
             ambientLightTop1.name = 'ambientLightTop1';
-            ambientLightTop1.position.set(-40, 15, 45);
+            ambientLightTop1.position.set(-11.5, 15, 15);
+            ambientLightTop1.castShadow = true;
+            ambientLightTop1.target.position.set(ambientLightTop1.position.x, 0.1, ambientLightTop1.position.z - 5);
             scene.add(ambientLightTop1);
+            // scene.add(new THREE.DirectionalLightHelper(ambientLightTop1, 0.5));
+            // console.log(ambientLightTop1);
 
             // ambient light-top 2
-            const ambientLightTop2 = new THREE.PointLight(model.ambient.color, model.ambient.intensity / 2);
+            const ambientLightTop2 = new THREE.DirectionalLight(model.ambient.color, model.ambient.intensity / 4);
             ambientLightTop2.name = 'ambientLightTop2';
-            ambientLightTop2.position.set(40, 15, 45);
+            ambientLightTop2.position.set(11.5, 15, 15);
+            ambientLightTop2.castShadow = true;
+            ambientLightTop2.target.position.set(ambientLightTop2.position.x, 0.1, ambientLightTop2.position.z - 5);
             scene.add(ambientLightTop2);
+            // scene.add(new THREE.DirectionalLightHelper(ambientLightTop2, 0.5));
+            // console.log(ambientLightTop2);
 
             // ambient light-top 3
-            const ambientLightTop3 = new THREE.PointLight(model.ambient.color, model.ambient.intensity / 2);
+            const ambientLightTop3 = new THREE.DirectionalLight(model.ambient.color, model.ambient.intensity / 4);
             ambientLightTop3.name = 'ambientLightTop3';
-            ambientLightTop3.position.set(0, 15, 45);
+            ambientLightTop3.position.set(0, 15, 15);
+            ambientLightTop3.castShadow = true;
+            ambientLightTop3.target.position.set(ambientLightTop3.position.x, 0.1, ambientLightTop3.position.z - 5);
             scene.add(ambientLightTop3);
+            // scene.add(new THREE.DirectionalLightHelper(ambientLightTop3, 0.5));
+            // console.log(ambientLightTop3);
+
 
             //screen light
             var backscreenLight = GlowLight({ w: 43.0, h: 0.03 }, { color1: model.ambient.color, color2: model.theme.color }, 0.05, 0.5);
@@ -418,6 +514,7 @@ if (!model_wrapper != undefined) {
             let pillerLight1 = pillerLights.clone();
             pillerLight1.name = 'pillerLight1';
             scene.add(pillerLight1);
+
             //piller light 2
             let pillerLight2 = pillerLights.clone();
             pillerLight2.name = 'pillerLight2';
@@ -450,9 +547,10 @@ if (!model_wrapper != undefined) {
         function pillerLight(props) {
             var pillerLightGroup = new THREE.Group();
             pillerLightGroup.position.set(props.x, props.y, props.z);
-            var lights = new THREE.PointLight(props.color, 0.045, 0.01, 0.01);
+            // var lights = new THREE.PointLight(props.color, model.theme.intensity, 0.01, 0.01);
+            var lights = new THREE.PointLight(props.color, model.theme.intensity/2, 2, 8);
             lights.name = 'pillerLights';
-            lights.position.set(0, 0, 0);
+            lights.position.set(0, 0.3, 0);
             pillerLightGroup.add(lights);
             // console.log(lights);
             pillerLightGroup.add(new THREE.Mesh(
@@ -460,10 +558,7 @@ if (!model_wrapper != undefined) {
                 new THREE.MeshBasicMaterial({
                     color: props.color,
                     transparent: true,
-                    opacity: 1,
                     alphaMap: model.theme.map,
-                    aoMap: model.theme.map,
-                    aoMapIntensity: 10,
                 })
             ));
             return pillerLightGroup;
@@ -510,62 +605,62 @@ if (!model_wrapper != undefined) {
         //////////////////////
 
         //add 2d text
-        function addText(text, textOptions) {
-            const option = {
-                font: textOptions.font || "Arial",
-                size: textOptions.size || 20,
-                weight: textOptions.weight || "regular",
-                align: textOptions.align || "center",
-                vAlign: textOptions.vAlign || "middle",
-                color: textOptions.color || "#ff0000",
-            };
-            const c = document.createElement('canvas');
-            c.style.cssText = `
-      position: absolute;
-      z-index: 22;
-      top: 50px;
-      left: 50px;`;
-            c.width = 1024; c.height = 1024;
-            const ctx = c.getContext('2d');
-            ctx.font = `${option.size}px ${option.font}`;
-            ctx.textAlign = option.align;
-            ctx.textBaseline = option.vAlign;
-            ctx.fillStyle = option.color;
-            let metrics = ctx.measureText(text);
-            // ctx.font ="regular 500px Arial" //`${option.weight} ${option.size}px ${option.font}`;
-            // console.log(metrics);
-            var textWidth = metrics.width;
-            var textHeight = option.size;
-            //  console.log(textWidth, textHeight);
-            ctx.fillText(text, textWidth / 2, c.height / 2 + textHeight / 2);
+        // function addText(text, textOptions) {
+        //     const option = {
+        //         font: textOptions.font || "Arial",
+        //         size: textOptions.size || 20,
+        //         weight: textOptions.weight || "regular",
+        //         align: textOptions.align || "center",
+        //         vAlign: textOptions.vAlign || "middle",
+        //         color: textOptions.color || "#ff0000",
+        //     };
+        //     const c = document.createElement('canvas');
+        //     c.style.cssText = `
+        // position: absolute;
+        // z-index: 22;
+        // top: 50px;
+        // left: 50px;`;
+        //     c.width = 1024; c.height = 1024;
+        //     const ctx = c.getContext('2d');
+        //     ctx.font = `${option.size}px ${option.font}`;
+        //     ctx.textAlign = option.align;
+        //     ctx.textBaseline = option.vAlign;
+        //     ctx.fillStyle = option.color;
+        //     let metrics = ctx.measureText(text);
+        //     // ctx.font ="regular 500px Arial" //`${option.weight} ${option.size}px ${option.font}`;
+        //     // console.log(metrics);
+        //     var textWidth = metrics.width;
+        //     var textHeight = option.size;
+        //     //  console.log(textWidth, textHeight);
+        //     ctx.fillText(text, textWidth / 2, c.height / 2 + textHeight / 2);
 
-            let txtBox = new THREE.Group();
-            var textTexture = new THREE.Texture(c);
-            textTexture.needsUpdate = true;
-            // console.log(textTexture);
-            textTexture.wrapS = THREE.RepeatWrapping;
-            textTexture.wrapT = THREE.RepeatWrapping;
-            var textMaterial = new THREE.MeshPhongMaterial({
-                map: textTexture,
-                transparent: true,
-                side: THREE.FrontSide,
-                alphaMap: textTexture,
-                displacementMap: textTexture,
-                normalMap: textTexture,
-                bumpMap: textTexture,
-                emmissive: option.color,
-                //useScreenCoordinates: false
-            });
-            // console.log(textMaterial);
-            let textTxt = new THREE.Mesh(new THREE.PlaneGeometry(8, 5, 10, 10), textMaterial);
-            let textTxt2 = textTxt.clone();
-            textTxt2.position.set(-4, 0, 0);
-            textTxt2.rotation.set(0, -Math.PI, 0);
-            txtBox.add(textTxt, textTxt2);
+        //     let txtBox = new THREE.Group();
+        //     var textTexture = new THREE.Texture(c);
+        //     textTexture.needsUpdate = true;
+        //     // console.log(textTexture);
+        //     textTexture.wrapS = THREE.RepeatWrapping;
+        //     textTexture.wrapT = THREE.RepeatWrapping;
+        //     var textMaterial = new THREE.MeshPhongMaterial({
+        //         map: textTexture,
+        //         transparent: true,
+        //         side: THREE.FrontSide,
+        //         alphaMap: textTexture,
+        //         displacementMap: textTexture,
+        //         normalMap: textTexture,
+        //         bumpMap: textTexture,
+        //         // emmissive: option.color,
+        //         //useScreenCoordinates: false
+        //     });
+        //     // console.log(textMaterial);
+        //     let textTxt = new THREE.Mesh(new THREE.PlaneGeometry(8, 5, 10, 10), textMaterial);
+        //     let textTxt2 = textTxt.clone();
+        //     textTxt2.position.set(-4, 0, 0);
+        //     textTxt2.rotation.set(0, -Math.PI, 0);
+        //     txtBox.add(textTxt, textTxt2);
 
-            return txtBox;
-            // container.appendChild(c);
-        }
+        //     return txtBox;
+        //     // container.appendChild(c);
+        // }
 
 
         function addTexture() {
@@ -577,15 +672,15 @@ if (!model_wrapper != undefined) {
                     side: THREE.DoubleSide,
                     color: elm.wall.color[0],
                     emissive: elm.wall.color[1],
-                    emissiveIntensity: 0.05,
-                    roughness: 0.55,
-                    metalness: 0.35,
+                    emissiveIntensity: 0.15,
+                    roughness: 0.3,
+                    metalness: 0.65,
                 });
             let roomObj = world.getObjectByName(elm.wall.name);
             roomObj.receiveShadow = true;
             roomObj.matrixAutoUpdate = false;
             roomObj.material = roomMat;
-            // console.log("room:", roomObj);
+            // console.log("room:", roomObj.material);
 
 
             //add base floor
@@ -594,8 +689,8 @@ if (!model_wrapper != undefined) {
                 color: elm.wall.color[0],
                 emissive: elm.wall.color[1],
                 color: elm.wall.color[0],
-                roughness: 0.65,
-                metalness: 0.25,
+                roughness: 0.3,
+                metalness: 0.65,
                 emissiveIntensity: 0.05,
             });
             let baseFloor = new THREE.Mesh(new THREE.PlaneGeometry(125.5, 60.5), baseFloorMat);
@@ -610,14 +705,14 @@ if (!model_wrapper != undefined) {
             //add stage floor
             let floorMat = new THREE.MeshStandardMaterial({
                 color: elm.floor.color[0],
-                roughness: 0.55,
-                metalness: 0.35,
+                roughness: 0.25,
+                metalness: 0.65,
                 side: THREE.DoubleSide,
                 map: elm.floor.map,
-                // alphaMap: elm.floor.lightMap,
+                alphaMap: elm.floor.lightMap,
                 aoMap: elm.floor.map,
                 bumpMap: elm.floor.map,
-                bumpScale: 0.15,
+                bumpScale: 1,
                 displacementMap: elm.floor.lightMap,
                 displacementScale: -0.01,
                 emissive: elm.floor.color[1],
@@ -628,11 +723,10 @@ if (!model_wrapper != undefined) {
             floorMat.map.flipY = false;
             floorMat.map.repeat.set(20, 10);
             floorMat.map.magFilter = THREE.NearestFilter;
-            // floorMat.map.encoding = THREE.sRGBEncoding;
+            floorMat.map.encoding = THREE.sRGBEncoding;
             let floor = new THREE.Mesh(new THREE.PlaneGeometry(44.5, 24.5), floorMat);
             floor.name = elm.floor.name + "cage";
             floor.receiveShadow = true;
-            // floor.castShadow = true;
             floor.position.set(0, 0.1, 7.5);
             floor.rotation.x = Math.PI / 2;
             scene.add(floor);
@@ -657,9 +751,20 @@ if (!model_wrapper != undefined) {
             _cone2.rotation.set(Math.PI / 2, 0, -Math.PI / 2);
             arenaLine.add(_cone2);
             //create text
-            let _text = addText("250 ft", { size: 150, color: model.theme.color });
-            _text.position.set(-10, 1, 20.5);
-            arenaLine.add(_text);
+            let labelDiv = document.createElement('span');
+            labelDiv.className = 'label1';
+            labelDiv.textContent = `${model.labels.text[0]}`;
+            labelDiv.style.cssText = `
+            background-color: ${model.labels.background};
+            font-size: ${model.labels.size};
+            font-weight: ${model.labels.weight};
+            color: ${model.labels.color};
+            text-align: ${model.labels.alignment};
+            `;
+            let pointLabel = new CSS2DObject(labelDiv);
+            pointLabel.position.set(0, 0.2, 0);
+            pointLabel.center.set(0, 1);
+            _line.add(pointLabel);
 
             ////create h-line
             _line = GlowLight({ w: 24.5, h: 0.01 }, { color1: model.theme.color, color2: model.theme.color }, 0.05, 0.75, elm.vrGradient);
@@ -676,10 +781,24 @@ if (!model_wrapper != undefined) {
             _cone2.rotation.set(-Math.PI / 2, 0, 0);
             arenaLine.add(_cone2);
             // //create text
-            _text = addText("150 ft", { size: 150, color: model.theme.color });
-            _text.position.set(-22.8, 1, 15.5);
-            _text.rotation.set(0, -Math.PI / 2, 0);
-            arenaLine.add(_text);
+            labelDiv = document.createElement('span');
+            labelDiv.className = 'label2';
+            labelDiv.textContent = `${model.labels.text[1]}`;
+            labelDiv.style.cssText = `
+            background-color: ${model.labels.background};
+            font-size: ${model.labels.size};
+            font-weight: ${model.labels.weight};
+            color: ${model.labels.color};
+            text-align: ${model.labels.alignment};
+            `;
+            pointLabel = new CSS2DObject(labelDiv);
+            pointLabel.position.set(0, 0.2, 0);
+            pointLabel.center.set(0, 1);
+            _line.add(pointLabel);
+            // _text = addText("150 ft", { size: 150, color: model.theme.color }, );
+            // _text.position.set(-22.8, 1, 15.5);
+            // _text.rotation.set(0, -Math.PI / 2, 0);
+            // arenaLine.add(_text);
             scene.add(arenaLine);
 
             //add texture to stage cage
@@ -690,8 +809,6 @@ if (!model_wrapper != undefined) {
                 // emissiveIntensity: 0.02,
                 roughness: 0.25,
                 metalness: 0.75,
-                refractionRatio: 0.05,
-                // map: elm.cage.map,
             });
             let stageCageObj = world.getObjectByName(elm.cage.name);
             stageCageObj.castShadow = true;
@@ -717,8 +834,6 @@ if (!model_wrapper != undefined) {
             //poster texture
             let posterMat = new THREE.MeshBasicMaterial({
                 side: THREE.FrontSide,
-                roughness: 1,
-                metalness: 0,
                 map: elm.poster.map,
                 transparent: true,
                 alphaMap: elm.poster.map,
@@ -819,27 +934,24 @@ if (!model_wrapper != undefined) {
             heatObj.material = heatMat;
             heatObj.castShadow = false;
             heatObj.receiveShadow = false;
-            // heatObj.position.set(0, 5, 0);
             heatObj.matrixAutoUpdate = false;
             // console.log("heatbox:", heatObj);
             createInteractiveMeshes(elm.heatbox);
 
 
             //add texture to heatBox rope
-            // pCylinder4,pCylinder5,pCylinder6,pCylinder7
-            let heatRopeMat = new THREE.MeshStandardMaterial({
+            let heatRopeMat = new THREE.MeshBasicMaterial({
                 side: THREE.DoubleSide,
-                color: "#000000",
+                color: elm.heatboxStand.color,
                 roughness: 0.25,
-                metalness: 0.85,
+                metalness: 0.5,
             });
-            for (let i = 4; i <= 7; i++) {
-                let heatRopeObj = world.getObjectByName(`pCylinder${i}`);
-                heatRopeObj.material = heatRopeMat;
-                heatRopeObj.castShadow = false;
-                heatRopeObj.receiveShadow = false;
-                heatRopeObj.matrixAutoUpdate = false;
-            }
+            let heatRopeObj = world.getObjectByName(elm.heatboxStand.name);
+            heatRopeObj.material = heatRopeMat;
+            heatRopeObj.castShadow = false;
+            heatRopeObj.receiveShadow = false;
+            heatRopeObj.matrixAutoUpdate = false;
+            // console.log("heatbox rope:", heatRopeObj);
 
 
             //add texture to sensor unit
@@ -1233,6 +1345,7 @@ if (!model_wrapper != undefined) {
             camera.aspect = sizes.width / sizes.height;
             camera.updateProjectionMatrix();
             renderer.setSize(sizes.width, sizes.height);
+            labelRenderer.setSize(sizes.width, sizes.height);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         }
 
@@ -1245,75 +1358,4 @@ if (!model_wrapper != undefined) {
         init();
         window.addEventListener("resize", adjustWindow);
     }
-
-    // let camera, scene, renderer, labelRenderer;
-    // const textureLoader = new THREE.TextureLoader();
-
-    // init();
-    // animate();
-
-    // function init() {
-    //     const EARTH_RADIUS = 1;
-    //     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 200);
-    //     camera.position.set(10, 5, 20);
-    //     camera.layers.enableAll();
-
-    //     scene = new THREE.Scene();
-
-    //     const dirLight = new THREE.DirectionalLight(0xffffff, 3);
-    //     dirLight.position.set(0, 0, 1);
-    //     dirLight.layers.enableAll();
-    //     scene.add(dirLight);
-
-    //     const earthGeometry = new THREE.SphereGeometry(EARTH_RADIUS, 16, 16);
-    //     const earthMaterial = new THREE.MeshStandardMaterial({
-    //         color: "red",
-    //     });
-    //     // earthMaterial.map.colorSpace = THREE.SRGBColorSpace;
-    //     const earth = new THREE.Mesh(earthGeometry, earthMaterial);
-    //     scene.add(earth);
-
-    //     const earthDiv = document.createElement('div');
-    //     earthDiv.className = 'label';
-    //     earthDiv.textContent = 'Earth';
-    //     earthDiv.style.backgroundColor = 'transparent';
-
-    //     const earthLabel = new CSS2DObject(earthDiv);
-    //     earthLabel.position.set(1.5 * EARTH_RADIUS, 0, 0);
-    //     earthLabel.center.set(0, 1);
-    //     earth.add(earthLabel);
-    //     earthLabel.layers.set(0);
-
-    //     renderer = new THREE.WebGLRenderer();
-    //     renderer.setPixelRatio(window.devicePixelRatio);
-    //     renderer.setSize(window.innerWidth, window.innerHeight);
-    //     document.body.appendChild(renderer.domElement);
-
-    //     labelRenderer = new CSS2DRenderer();
-    //     labelRenderer.setSize(window.innerWidth, window.innerHeight);
-    //     labelRenderer.domElement.style.position = 'absolute';
-    //     labelRenderer.domElement.style.top = '0px';
-    //     document.body.appendChild(labelRenderer.domElement);
-
-    //     const controls = new OrbitControls(camera, labelRenderer.domElement);
-    //     controls.minDistance = 5;
-    //     controls.maxDistance = 100;
-
-    //     window.addEventListener('resize', onWindowResize);
-    // }
-
-    // function onWindowResize() {
-    //     camera.aspect = window.innerWidth / window.innerHeight;
-    //     camera.updateProjectionMatrix();
-    //     renderer.setSize(window.innerWidth, window.innerHeight);
-    //     labelRenderer.setSize(window.innerWidth, window.innerHeight);
-
-    // }
-
-
-    // function animate() {
-    //     requestAnimationFrame(animate);
-    //     renderer.render(scene, camera);
-    //     labelRenderer.render(scene, camera);
-    // }
 }
