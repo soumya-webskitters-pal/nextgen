@@ -1,5 +1,4 @@
-// const hostURL = "https://soumya-webskitters-pal.github.io/nextgen";
-const hostURL = "";
+const hostURL = "https://soumya-webskitters-pal.github.io/nextgen";
 
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
