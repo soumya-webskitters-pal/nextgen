@@ -260,14 +260,14 @@ if (!model_wrapper != undefined) {
             },
             labels: {
                 color: "#000000",
-                size: "1.25vw",
+                size: "0.9vw",
                 weight: "bold",
                 alignment: "center",
                 background: "#ffffff",
                 pulseDot: "#00d3ff",
                 text: ["250 ft", "150 ft"],
                 areaBackground: "rgba(0,0,0,0.5)",
-                areaFontSize: "1.8vw",
+                areaFontSize: "1.15vw",
             },
         };
 
