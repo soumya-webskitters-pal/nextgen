@@ -271,7 +271,7 @@ if (!model_wrapper != undefined) {
             },
         };
 
-        const cameraResetPos = new THREE.Vector3(0, 8.21, 25.5);
+        const cameraResetPos = new THREE.Vector3(0, 6.21, 25.5);
         // const lookAt = new THREE.Vector3(0, 0, 0);
         var interactiveMeshes = [];
         let zoomed = false;
