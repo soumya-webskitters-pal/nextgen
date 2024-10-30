@@ -102,9 +102,6 @@ if (!model_wrapper != undefined) {
                 floor: {
                     name: "floor",
                     map: textureLoader.load(`texture/Vr_floor.webp`),
-                    lightMap: textureLoader.load(
-                        `${hostURL}/texture/Vr_floor_lightmap.webp`
-                    ),
                     color: ["#ffffff", "#ffffff"],
                     click: false,
                     text: "Arena",
@@ -125,9 +122,6 @@ if (!model_wrapper != undefined) {
                     text: "Arena",
                     id: "",
                     map: textureLoader.load(`${hostURL}/texture/Vr_cage.webp`),
-                    lightMap: textureLoader.load(
-                        `${hostURL}/texture/Vr_cage_lightmap.webp`
-                    )
                 },
                 camera: {
                     name: "camera",
@@ -163,9 +157,6 @@ if (!model_wrapper != undefined) {
                 screen: {
                     name: "screen",
                     map: textureLoader.load(`${hostURL}/texture/Vr_screen.webp`),
-                    lightMap: textureLoader.load(
-                        `${hostURL}/texture/Vr_screen_lightmap.webp`
-                    ),
                     color: "#ffffff",
                     click: false,
                     text: "Screen",
@@ -556,7 +547,7 @@ if (!model_wrapper != undefined) {
                 new THREE.MeshBasicMaterial({
                     side: THREE.DoubleSide,
                     color: model.heaterLight.color[1],
-                    emissive: model.heaterLight.color[1],
+                    // emissive: model.heaterLight.color[1],
                 })
             );
             heaterLight1.rotation.set(0, 0, -Math.PI / 2);
@@ -851,7 +842,7 @@ if (!model_wrapper != undefined) {
 
             //add texture to stage cage
             let stageMat = new THREE.MeshStandardMaterial({
-                side: THREE.AdditiveSide,
+                side: THREE.DoubleSide,
                 color: elm.cage.color[0],
                 roughness: 0.2,
                 metalness: 1,
