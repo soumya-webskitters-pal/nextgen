@@ -52,6 +52,11 @@ if (!model_wrapper != undefined) {
         document.body.classList.remove("modelView");
         modelCloser.style.display = "none";
         document.querySelector(".navbar").classList.remove("hide");
+        gsap.set(container, { pointerEvents: "none" });
+        gsap.to(modelViewer, {
+            pointerEvents: "all",
+            opacity: 1,
+        });
     });
 
     function modelApp() {
