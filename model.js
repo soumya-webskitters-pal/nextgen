@@ -101,7 +101,7 @@ if (!model_wrapper != undefined) {
                 },
                 floor: {
                     name: "floor",
-                    map: textureLoader.load(`texture/Vr_floor.webp`),
+                    map: textureLoader.load(`${hostURL}/texture/Vr_floor.webp`),
                     color: ["#ffffff", "#ffffff"],
                     click: false,
                     text: "Arena",
@@ -220,7 +220,7 @@ if (!model_wrapper != undefined) {
                 alignment: "center",
                 background: "#ffffff",
                 pulseDot: "#00d3ff",
-                text: ["66.6ft", "33.8ft"],
+                text: [container.getAttribute("data-length"), container.getAttribute("data-width")],
                 areaBackground: "rgba(0,0,0,0.5)",
                 areaFontSize: "1.15vw",
             },
