@@ -43,6 +43,7 @@ if (!model_wrapper != undefined) {
                 document.querySelector("html").classList.add("modelView");
                 document.body.classList.add("modelView");
                 modelCloser.style.display = "inline-flex";
+                document.querySelector(".navbar").classList.add("hide");
             },
         });
     });
@@ -50,6 +51,7 @@ if (!model_wrapper != undefined) {
         document.querySelector("html").classList.remove("modelView");
         document.body.classList.remove("modelView");
         modelCloser.style.display = "none";
+        document.querySelector(".navbar").classList.remove("hide");
     });
 
     function modelApp() {
