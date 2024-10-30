@@ -39,6 +39,8 @@ if (!model_wrapper != undefined) {
                     yPercent: 0,
                     duration: 0.5,
                 });
+                document.querySelector("html").classList.add("modelView");
+                document.body.classList.add("modelView");
             },
         });
     });
@@ -342,8 +344,6 @@ if (!model_wrapper != undefined) {
                         opacity: 0,
                         pointerEvents: "none",
                     });
-                    document.querySelector("html").classList.add("modelView");
-                    document.body.classList.add("modelView");
                 },
             });
 
