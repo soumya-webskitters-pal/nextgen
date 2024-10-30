@@ -12,6 +12,7 @@ if (!model_wrapper != undefined) {
     //UI
     const container = model_wrapper.querySelector(".canvas_area");
     const modelViewer = model_wrapper.querySelector(".enable_model");
+    const modelCloser = model_wrapper.querySelector(".close_model");
 
     //info modal
     const info_modal = container.querySelector(".arena_modal");
@@ -41,8 +42,14 @@ if (!model_wrapper != undefined) {
                 });
                 document.querySelector("html").classList.add("modelView");
                 document.body.classList.add("modelView");
+                modelCloser.style.display = "inline-flex";
             },
         });
+    });
+    modelCloser.addEventListener("click", function () {
+        document.querySelector("html").classList.remove("modelView");
+        document.body.classList.remove("modelView");
+        modelCloser.style.display = "none";
     });
 
     function modelApp() {
