@@ -9,6 +9,9 @@ import {
 } from "three/addons/renderers/CSS2DRenderer.js";
 const model_wrapper = document.querySelector(".model_wrapper");
 if (!model_wrapper != undefined) {
+    //render flag
+    var modelRender = false;
+
     //UI
     const container = model_wrapper.querySelector(".canvas_area");
     const modelViewer = model_wrapper.querySelector(".enable_model");
@@ -22,6 +25,7 @@ if (!model_wrapper != undefined) {
 
     // window.addEventListener("DOMContentLoaded", modelApp);
     modelViewer.addEventListener("click", function () {
+        modelRender = true;
         container.scrollIntoView({ behavior: 'smooth' });
         modelApp();
         gsap.to(modelViewer, {
@@ -64,6 +68,7 @@ if (!model_wrapper != undefined) {
             pointerEvents: "all",
             opacity: 1,
             onComplete: () => {
+                modelRender = false;
                 gsap.to(modelViewer, {
                     pointerEvents: "all",
                     opacity: 1,
@@ -380,12 +385,14 @@ if (!model_wrapper != undefined) {
 
         //// render scene
         function renderScene() {
-            if (model.loaded) {
-                controls.update();
+            if (modelRender) {
+                if (model.loaded) {
+                    controls.update();
+                }
+                renderer.render(scene, camera);
+                labelRenderer.render(scene, camera);
+                requestAnimationFrame(renderScene);
             }
-            renderer.render(scene, camera);
-            labelRenderer.render(scene, camera);
-            requestAnimationFrame(renderScene);
         }
 
         //// load model
@@ -844,7 +851,7 @@ if (!model_wrapper != undefined) {
             pointLabel.center.set(0, 1);
             _line.add(pointLabel);
             scene.add(arenaLine);
-            
+
 
             //add texture to stage cage
             let stageMat = new THREE.MeshStandardMaterial({
