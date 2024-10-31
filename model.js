@@ -21,7 +21,8 @@ if (!model_wrapper != undefined) {
     const resetCam = container.querySelector(".reset");
 
     window.addEventListener("DOMContentLoaded", modelApp);
-    modelViewer.addEventListener("click", function () {
+    modelViewer.addEventListener("click", function (e) {
+        e.preventDefault();
         gsap.to(modelViewer, {
             pointerEvents: "none",
             opacity: 0,
