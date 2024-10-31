@@ -55,6 +55,7 @@ if (!model_wrapper != undefined) {
         });
     });
     modelCloser.addEventListener("click", function () {
+        resetCam.click();
         gsap.set(container, { pointerEvents: "none" });
         modelCloser.style.display = "none";
         gsap.to(info_modal, {
@@ -1218,6 +1219,8 @@ if (!model_wrapper != undefined) {
         }
 
         function zoomInTimeline(obj = null, reset = false) {
+            console.log(obj);
+            
             controls.enabled = false;
 
             //hide all labels
