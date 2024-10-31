@@ -174,7 +174,7 @@ if (!model_wrapper != undefined) {
                 sensorBody: {
                     name: ["scent_unit_body", "scent_unit_body001"],
                     map: textureLoader.load(`${hostURL}/texture/Vr_sensor.webp`),
-                    color: "#535353",//"#84240c",
+                    color: "#535353",
                     click: true,
                     text: "Scent Diffusion",
                     id: "scent_item",
@@ -247,14 +247,14 @@ if (!model_wrapper != undefined) {
             },
             labels: {
                 color: "#000000",
-                size: "0.9vw",
-                weight: "bold",
+                size: "0.8em",
+                weight: "regular",
                 alignment: "center",
                 background: "#ffffff",
                 pulseDot: "#00d3ff",
                 text: [container.getAttribute("data-length"), container.getAttribute("data-width")],
                 areaBackground: "rgba(0,0,0,0.5)",
-                areaFontSize: "1.15vw",
+                areaFontSize: "0.85em",
             },
         };
 
@@ -398,6 +398,7 @@ if (!model_wrapper != undefined) {
         //element update
         function elementUpdate() {
             if (model.loaded) {
+                // camera.position.z = model.camera.position.z *sizes.width;
                 controls.update();
             }
         }
@@ -1253,7 +1254,7 @@ if (!model_wrapper != undefined) {
                             controls.enableRotate = true;
                             controls.enableDamping = true;
                             controls.enableZoom = true;
-                            controls.enablePan = model.camera.pan;
+                            controls.enablePan = true;// model.camera.pan;
                             controls.minDistance = model.camera.distance.min;
                             controls.maxDistance = model.camera.distance.max;
                             controls.minPolarAngle = model.camera.polar.min;
