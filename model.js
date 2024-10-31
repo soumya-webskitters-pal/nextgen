@@ -66,7 +66,10 @@ if (model_wrapper != undefined) {
                 document.querySelector("html").classList.add("modelView");
                 document.body.classList.add("modelView");
                 modelCloser.style.display = "inline-flex";
-                document.querySelector(".navbar").classList.add("hide");
+                let navbar = document.querySelector(".navbar");
+                if (navbar != undefined) {
+                    document.querySelector(".navbar").classList.add("hide");
+                }
             },
         });
     });
@@ -92,7 +95,10 @@ if (model_wrapper != undefined) {
                     pointerEvents: "all",
                     opacity: 1,
                 });
-                document.querySelector(".navbar").classList.remove("hide");
+                let navbar = document.querySelector(".navbar");
+                if (navbar != undefined) {
+                    document.querySelector(".navbar").classList.remove("hide");
+                }
                 document.querySelector("html").classList.remove("modelView");
                 document.body.classList.remove("modelView");
             }
