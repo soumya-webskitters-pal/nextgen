@@ -23,11 +23,13 @@ if (!model_wrapper != undefined) {
     window.addEventListener("DOMContentLoaded", modelApp);
     modelViewer.addEventListener("click", function (e) {
         e.preventDefault();
+        container.scrollIntoView({ behavior: 'smooth' });
         gsap.to(modelViewer, {
             pointerEvents: "none",
             opacity: 0,
         });
         gsap.to(".imms_container", {
+            delay: 0.3,
             duration: 0.5,
             pointerEvents: "none",
             opacity: 0,
