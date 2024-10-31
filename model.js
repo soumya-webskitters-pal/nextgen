@@ -323,7 +323,7 @@ if (model_wrapper != undefined) {
             container.appendChild(renderer.domElement);
 
             //2d label renderer
-            labelRenderer.setSize(window.innerWidth, window.innerHeight);
+            labelRenderer.setSize(sizes.width , sizes.height);
             labelRenderer.domElement.style.position = "absolute";
             labelRenderer.domElement.style.top = "0px";
             container.appendChild(labelRenderer.domElement);
