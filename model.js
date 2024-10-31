@@ -48,14 +48,27 @@ if (!model_wrapper != undefined) {
         });
     });
     modelCloser.addEventListener("click", function () {
-        document.querySelector("html").classList.remove("modelView");
-        document.body.classList.remove("modelView");
-        modelCloser.style.display = "none";
-        document.querySelector(".navbar").classList.remove("hide");
         gsap.set(container, { pointerEvents: "none" });
-        gsap.to(modelViewer, {
+        modelCloser.style.display = "none";
+        gsap.to(info_modal, {
+            opacity: 0,
+            pointerEvents: "none",
+            yPercent: 100,
+            duration: 0.5,
+        });
+        gsap.to(".imms_container", {
+            duration: 0.5,
             pointerEvents: "all",
             opacity: 1,
+            onComplete: () => {
+                gsap.to(modelViewer, {
+                    pointerEvents: "all",
+                    opacity: 1,
+                });
+                document.querySelector(".navbar").classList.remove("hide");
+                document.querySelector("html").classList.remove("modelView");
+                document.body.classList.remove("modelView");
+            }
         });
     });
 
