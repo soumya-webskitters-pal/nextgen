@@ -8,6 +8,8 @@ import {
     CSS2DObject,
 } from "three/addons/renderers/CSS2DRenderer.js";
 const model_wrapper = document.querySelector(".model_wrapper");
+console.log();
+
 if (model_wrapper != undefined) {
     //render flag
     var modelRender = false;
@@ -41,8 +43,6 @@ if (model_wrapper != undefined) {
         });
         if (container.querySelector("canvas") == null) {
             modelApp();
-            console.log("callll");
-
         }
         gsap.to(modelViewer, {
             pointerEvents: "none",
@@ -388,7 +388,10 @@ if (model_wrapper != undefined) {
                 gsap.to(resetCam, { opacity: 0, pointerEvents: "none", duration: 0.5 });
                 zoomInTimeline(null, true);
                 controls.enabled = true;
-                modelRender = true;
+
+                if (window.innerWidth > 1024 || container.classList.contains("responsive")) {
+                    modelRender = true;
+                }
                 info_modal.querySelectorAll(".modal_data").forEach((e, i) => {
                     e.dataset.id == "arena"
                         ? e.classList.add("show")
