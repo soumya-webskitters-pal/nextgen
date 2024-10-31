@@ -20,10 +20,10 @@ if (!model_wrapper != undefined) {
     //reset button
     const resetCam = container.querySelector(".reset");
 
-    window.addEventListener("DOMContentLoaded", modelApp);
-    modelViewer.addEventListener("click", function (e) {
-        e.preventDefault();
+    // window.addEventListener("DOMContentLoaded", modelApp);
+    modelViewer.addEventListener("click", function () {
         container.scrollIntoView({ behavior: 'smooth' });
+        modelApp();
         gsap.to(modelViewer, {
             pointerEvents: "none",
             opacity: 0,
@@ -289,23 +289,6 @@ if (!model_wrapper != undefined) {
             renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             renderer.physicallyCorrectLights = true;
 
-
-            // renderer.outputEncoding = THREE.sRGBEncoding;
-            // renderer.toneMapping = THREE.CineonToneMapping;
-            // renderer.toneMappingExposure = 2.1;
-
-            // THREE.ColorManagement.enabled = true;
-            // THREE.ColorManagement.legacyMode = false;
-            // renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
-            // renderer.outputColorSpace = THREE.SRGBColorSpace;
-            // renderer.toneMapping = THREE.ACESFilmicToneMapping;
-            // renderer.toneMapping = THREE.ReinhardToneMapping;
-            // renderer.toneMappingExposure = Math.pow(1.98, 1.0);
-
-            // renderer.gammaInput = true;
-            // renderer.gammaOutput = true;
-            // renderer.gammaFactor = 0.08;
-
             // first render
             container.appendChild(renderer.domElement);
 
@@ -395,17 +378,11 @@ if (!model_wrapper != undefined) {
         }
 
 
-        //element update
-        function elementUpdate() {
-            if (model.loaded) {
-                // camera.position.z = model.camera.position.z *sizes.width;
-                controls.update();
-            }
-        }
-
         //// render scene
         function renderScene() {
-            elementUpdate();
+            if (model.loaded) {
+                controls.update();
+            }
             renderer.render(scene, camera);
             labelRenderer.render(scene, camera);
             requestAnimationFrame(renderScene);
@@ -449,9 +426,6 @@ if (!model_wrapper != undefined) {
         }
         function addLight() {
             //// Env light
-            // scene.add(new THREE.AmbientLight(model.ambient.color, model.ambient.intensity * 5));
-
-
             var ambientFrontLight1 = new THREE.DirectionalLight(model.ambient.color, 0.25);
             ambientFrontLight1.name = "ambientFrontLight1";
             ambientFrontLight1.position.set(0, 50, 65);
@@ -579,7 +553,6 @@ if (!model_wrapper != undefined) {
                 new THREE.MeshBasicMaterial({
                     side: THREE.DoubleSide,
                     color: model.heaterLight.color[1],
-                    // emissive: model.heaterLight.color[1],
                 })
             );
             heaterLight1.rotation.set(0, 0, -Math.PI / 2);
@@ -871,6 +844,7 @@ if (!model_wrapper != undefined) {
             pointLabel.center.set(0, 1);
             _line.add(pointLabel);
             scene.add(arenaLine);
+            
 
             //add texture to stage cage
             let stageMat = new THREE.MeshStandardMaterial({
