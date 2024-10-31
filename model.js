@@ -8,7 +8,7 @@ import {
     CSS2DObject,
 } from "three/addons/renderers/CSS2DRenderer.js";
 const model_wrapper = document.querySelector(".model_wrapper");
-if (!model_wrapper != undefined) {
+if (model_wrapper != undefined) {
     //render flag
     var modelRender = false;
 
