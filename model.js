@@ -374,7 +374,7 @@ if (model_wrapper != undefined) {
                 yPercent: 100,
             });
             gsap.to(loader, {
-                delay: 0.5,
+                delay: 1.5,
                 opacity: 0,
                 duration: 0.5,
                 onComplete: () => {
