@@ -27,7 +27,23 @@ if (!model_wrapper != undefined) {
     modelViewer.addEventListener("click", function () {
         modelRender = true;
         container.scrollIntoView({ behavior: 'smooth' });
-        modelApp();
+        gsap.set(info_modal, {
+            opacity: 0,
+            pointerEvents: "none",
+            yPercent: 100,
+        });
+        info_modal
+            .querySelector('.modal_data[data-id="arena"]')
+            .classList.add("show");
+        gsap.set(resetCam, {
+            opacity: 0,
+            pointerEvents: "none",
+        });
+        if (container.querySelector("canvas") == null) {
+            modelApp();
+            console.log("callll");
+
+        }
         gsap.to(modelViewer, {
             pointerEvents: "none",
             opacity: 0,
@@ -69,7 +85,9 @@ if (!model_wrapper != undefined) {
             pointerEvents: "all",
             opacity: 1,
             onComplete: () => {
+                // setTimeout(() => {
                 modelRender = false;
+                // }, 2000);
                 gsap.to(modelViewer, {
                     pointerEvents: "all",
                     opacity: 1,
@@ -277,11 +295,11 @@ if (!model_wrapper != undefined) {
         camera.aspect = sizes.width / sizes.height;
         camera.updateProjectionMatrix();
 
-
         // env map
         const reflectionEnv = new THREE.CubeTextureLoader().load(model.element.env);
 
 
+        //init model
         function init() {
             gsap.set(container, {
                 pointerEvents: "none",
@@ -341,6 +359,7 @@ if (!model_wrapper != undefined) {
             zoomInTimeline(null, true);
         }
 
+
         //// enable setup
         function enableSetup() {
             gsap.set(info_modal, {
@@ -354,7 +373,6 @@ if (!model_wrapper != undefined) {
                 duration: 0.5,
                 onComplete: () => {
                     loader.remove();
-
                     info_modal
                         .querySelector('.modal_data[data-id="arena"]')
                         .classList.add("show");
@@ -368,8 +386,9 @@ if (!model_wrapper != undefined) {
 
             resetCam.addEventListener("click", () => {
                 gsap.to(resetCam, { opacity: 0, pointerEvents: "none", duration: 0.5 });
-                controls.enabled = true;
                 zoomInTimeline(null, true);
+                controls.enabled = true;
+                modelRender = true;
                 info_modal.querySelectorAll(".modal_data").forEach((e, i) => {
                     e.dataset.id == "arena"
                         ? e.classList.add("show")
@@ -386,15 +405,17 @@ if (!model_wrapper != undefined) {
 
         //// render scene
         function renderScene() {
+            // console.log(modelRender);
+            if (model.loaded) {
+                controls.update();
+            }
             if (modelRender) {
-                if (model.loaded) {
-                    controls.update();
-                }
                 renderer.render(scene, camera);
                 labelRenderer.render(scene, camera);
-                requestAnimationFrame(renderScene);
             }
+            requestAnimationFrame(renderScene);
         }
+
 
         //// load model
         function loadModel() {
@@ -417,6 +438,7 @@ if (!model_wrapper != undefined) {
             );
         }
 
+
         //// add light
         //////////////////////
         function modifyShadow(obj) {
@@ -432,6 +454,62 @@ if (!model_wrapper != undefined) {
             obj.decay = 0.001;
             obj.distance = 20
         }
+
+        function pillerLight(props) {
+            var pillerLightGroup = new THREE.Group();
+            pillerLightGroup.position.set(props.x, props.y, props.z);
+            let lights = new THREE.PointLight(props.color, model.theme.intensity, 12, 0.001);
+            //lights.castShadow=true;
+            lights.position.set(0, -2.8, 0);
+            lights.name = "pillerLights1";
+            pillerLightGroup.add(lights);
+
+            let lights2 = new THREE.PointLight(props.color, model.theme.intensity / 5, 5, 8);
+            lights2.position.set(0, -3, 0);
+            lights2.name = "pillerLights2";
+            pillerLightGroup.add(lights2);
+            // console.log(lights2);
+
+            pillerLightGroup.add(
+                new THREE.Mesh(
+                    new THREE.CylinderGeometry(props.r, props.r, props.h, 15, 8),
+                    new THREE.MeshBasicMaterial({
+                        color: props.color,
+                        transparent: true,
+                        alphaMap: model.theme.map,
+                    })
+                )
+            );
+            return pillerLightGroup;
+        }
+
+        function GlowLight(dimention, colors, step, spread) {
+            var glowLight = new THREE.Group();
+            glowLight.position.x = 0;
+            glowLight.position.y = step;
+            glowLight.position.z = 4.5;
+            for (var i = 0; i < 1; i += step) {
+                glowLight.add(
+                    new THREE.Mesh(
+                        new THREE.BoxGeometry(
+                            dimention.w,
+                            dimention.h,
+                            0.1 + (i * i) / spread
+                        ),
+                        new THREE.MeshLambertMaterial({
+                            side: THREE.DoubleSide,
+                            color: i < 0.15 ? colors.color1 : colors.color2,
+                            emissive: colors.color2,
+                            transparent: true,
+                            opacity: 1 - Math.pow(i, step),
+                        })
+                    )
+                );
+            }
+            glowLight.renderOrder = -5;
+            return glowLight;
+        }
+
         function addLight() {
             //// Env light
             var ambientFrontLight1 = new THREE.DirectionalLight(model.ambient.color, 0.25);
@@ -626,83 +704,9 @@ if (!model_wrapper != undefined) {
             scene.add(pillerLight6);
         }
 
-        function pillerLight(props) {
-            var pillerLightGroup = new THREE.Group();
-            pillerLightGroup.position.set(props.x, props.y, props.z);
-            let lights = new THREE.PointLight(props.color, model.theme.intensity, 12, 0.001);
-            //lights.castShadow=true;
-            lights.position.set(0, -2.8, 0);
-            lights.name = "pillerLights1";
-            pillerLightGroup.add(lights);
 
-            let lights2 = new THREE.PointLight(props.color, model.theme.intensity / 5, 5, 8);
-            lights2.position.set(0, -3, 0);
-            lights2.name = "pillerLights2";
-            pillerLightGroup.add(lights2);
-            // console.log(lights2);
-
-            pillerLightGroup.add(
-                new THREE.Mesh(
-                    new THREE.CylinderGeometry(props.r, props.r, props.h, 15, 8),
-                    new THREE.MeshBasicMaterial({
-                        color: props.color,
-                        transparent: true,
-                        alphaMap: model.theme.map,
-                    })
-                )
-            );
-            return pillerLightGroup;
-        }
-
-        function heaterLights(w, colors) {
-            var heaterLights = new THREE.Group();
-            for (var i = 0; i < 1; i++) {
-                heaterLights.add(
-                    new THREE.Mesh(
-                        new THREE.BoxGeometry(
-                            w,
-                            0.01,
-                            0.1
-                        ),
-                        new THREE.MeshBasicMaterial({
-                            side: THREE.DoubleSide,
-                            color: colors,
-                            emissive: colors,
-                        })
-                    )
-                );
-            }
-            heaterLights.renderOrder = -5;
-            return heaterLights;
-        }
-        function GlowLight(dimention, colors, step, spread) {
-            var glowLight = new THREE.Group();
-            glowLight.position.x = 0;
-            glowLight.position.y = step;
-            glowLight.position.z = 4.5;
-            for (var i = 0; i < 1; i += step) {
-                glowLight.add(
-                    new THREE.Mesh(
-                        new THREE.BoxGeometry(
-                            dimention.w,
-                            dimention.h,
-                            0.1 + (i * i) / spread
-                        ),
-                        new THREE.MeshLambertMaterial({
-                            side: THREE.DoubleSide,
-                            color: i < 0.15 ? colors.color1 : colors.color2,
-                            emissive: colors.color2,
-                            transparent: true,
-                            opacity: 1 - Math.pow(i, step),
-                        })
-                    )
-                );
-            }
-            glowLight.renderOrder = -5;
-            return glowLight;
-        }
-
-
+        //// add texture
+        //////////////////////
         function addTexture() {
             let elm = model.element;
 
@@ -1036,6 +1040,7 @@ if (!model_wrapper != undefined) {
             addInteractiveItem();
         }
 
+
         //// interaction
         //////////////////////
         function addInteractiveItem() {
@@ -1219,8 +1224,8 @@ if (!model_wrapper != undefined) {
         }
 
         function zoomInTimeline(obj = null, reset = false) {
-            console.log(obj);
-            
+            // console.log(obj);
+
             controls.enabled = false;
 
             //hide all labels
@@ -1238,7 +1243,7 @@ if (!model_wrapper != undefined) {
                             controls.enableRotate = true;
                             controls.enableDamping = true;
                             controls.enableZoom = true;
-                            controls.enablePan = true;// model.camera.pan;
+                            controls.enablePan = model.camera.pan;
                             controls.minDistance = model.camera.distance.min;
                             controls.maxDistance = model.camera.distance.max;
                             controls.minPolarAngle = model.camera.polar.min;
@@ -1455,7 +1460,6 @@ if (!model_wrapper != undefined) {
             });
         }
 
-        //add text
         function createInteractiveMeshes(el) {
             interactiveMeshes.push({
                 id: el.name,
@@ -1463,6 +1467,7 @@ if (!model_wrapper != undefined) {
                 clickable: el.click,
             });
         }
+
 
         //// responsive canvas
         function adjustWindow() {
@@ -1478,6 +1483,7 @@ if (!model_wrapper != undefined) {
 
         renderer.domElement.addEventListener("mousemove", onMouseMove, false);
         renderer.domElement.addEventListener("click", onClick, false);
+
 
         //// init function
         init();
