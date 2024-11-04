@@ -8,8 +8,6 @@ import {
     CSS2DObject,
 } from "three/addons/renderers/CSS2DRenderer.js";
 const model_wrapper = document.querySelector(".model_wrapper");
-console.log();
-
 if (model_wrapper != undefined) {
     //render flag
     var modelRender = false;
@@ -25,7 +23,16 @@ if (model_wrapper != undefined) {
     //reset button
     const resetCam = container.querySelector(".reset");
 
-    // window.addEventListener("DOMContentLoaded", modelApp);
+    gsap.set(info_modal, {
+        opacity: 0,
+        pointerEvents: "none",
+        yPercent: 100,
+    });
+    gsap.set([resetCam, modelCloser], {
+        opacity: 0,
+        pointerEvents: "none",
+    });
+
     modelViewer.addEventListener("click", function () {
         modelRender = true;
         container.scrollIntoView({ behavior: 'smooth' });
@@ -88,9 +95,7 @@ if (model_wrapper != undefined) {
             pointerEvents: "all",
             opacity: 1,
             onComplete: () => {
-                // setTimeout(() => {
                 modelRender = false;
-                // }, 2000);
                 gsap.to(modelViewer, {
                     pointerEvents: "all",
                     opacity: 1,
@@ -305,6 +310,15 @@ if (model_wrapper != undefined) {
         const reflectionEnv = new THREE.CubeTextureLoader().load(model.element.env);
 
 
+        //adjust z axis for mobile view
+        let mmModel = gsap.matchMedia();
+        mmModel.add("(max-width: 1024px)", () => {
+            console.log("mob");
+            model.camera.position.z = model.camera.position.z + 35;
+            model.camera.distance.max = model.camera.position.z;
+        })
+
+
         //init model
         function init() {
             gsap.set(container, {
@@ -323,7 +337,7 @@ if (model_wrapper != undefined) {
             container.appendChild(renderer.domElement);
 
             //2d label renderer
-            labelRenderer.setSize(sizes.width , sizes.height);
+            labelRenderer.setSize(sizes.width, sizes.height);
             labelRenderer.domElement.style.position = "absolute";
             labelRenderer.domElement.style.top = "0px";
             container.appendChild(labelRenderer.domElement);
@@ -359,7 +373,6 @@ if (model_wrapper != undefined) {
                     y: model.camera.targetPosition.y,
                     z: model.camera.targetPosition.z,
                 })
-            // console.log(controls.target);
 
             // camera
             zoomInTimeline(null, true);
@@ -368,11 +381,6 @@ if (model_wrapper != undefined) {
 
         //// enable setup
         function enableSetup() {
-            gsap.set(info_modal, {
-                opacity: 0,
-                pointerEvents: "none",
-                yPercent: 100,
-            });
             gsap.to(loader, {
                 delay: 1.5,
                 opacity: 0,
@@ -382,10 +390,10 @@ if (model_wrapper != undefined) {
                     info_modal
                         .querySelector('.modal_data[data-id="arena"]')
                         .classList.add("show");
-
-                    gsap.set(resetCam, {
-                        opacity: 0,
-                        pointerEvents: "none",
+                    gsap.set(info_modal, {
+                        opacity: 1,
+                        pointerEvents: "all",
+                        yPercent: 0,
                     });
                 },
             });
@@ -414,7 +422,6 @@ if (model_wrapper != undefined) {
 
         //// render scene
         function renderScene() {
-            // console.log(modelRender);
             if (model.loaded) {
                 controls.update();
             }
@@ -468,7 +475,6 @@ if (model_wrapper != undefined) {
             var pillerLightGroup = new THREE.Group();
             pillerLightGroup.position.set(props.x, props.y, props.z);
             let lights = new THREE.PointLight(props.color, model.theme.intensity, 12, 0.001);
-            //lights.castShadow=true;
             lights.position.set(0, -2.8, 0);
             lights.name = "pillerLights1";
             pillerLightGroup.add(lights);
@@ -833,7 +839,7 @@ if (model_wrapper != undefined) {
                 0.75,
                 elm.vrGradient
             );
-            _line.position.set(-24.8, 0.1, 7.5);
+            _line.position.set(-23, 0.1, 7.5);
             _line.rotation.set(0, Math.PI / 2, 0);
             arenaLine.add(_line);
             //add arrow
