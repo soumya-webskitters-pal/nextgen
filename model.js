@@ -281,7 +281,6 @@ if (model_wrapper != undefined) {
         //adjust z axis for mobile view
         let mmModel = gsap.matchMedia();
         mmModel.add("(max-width: 1024px)", () => {
-            console.log("mob");
             model.camera.position.z = model.camera.position.z + 35;
             model.camera.distance.max = model.camera.position.z;
         })
