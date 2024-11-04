@@ -63,7 +63,7 @@ if (model_wrapper != undefined) {
                 document.body.classList.add("modelView");
                 modelCloser.style.display = "inline-flex";
                 gsap.to(info_modal, {
-                    yPercent: 100,
+                    yPercent: 0,
                 });
                 gsap.to([modelCloser, info_modal], {
                     opacity: 1,
