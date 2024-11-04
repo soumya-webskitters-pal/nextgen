@@ -1042,13 +1042,15 @@ if (model_wrapper != undefined) {
 
             const transparentMat = new THREE.MeshBasicMaterial({
                 transparent: true,
-                opacity: 0,
+               opacity: 0,
                 color: "#000000",
+                // color:"red"
             });
 
             //add camera box
             let camCube = new THREE.Mesh(
-                new THREE.BoxGeometry(0.8, 0.8, 0.8),
+                // new THREE.BoxGeometry(0.8, 0.8, 0.8),
+                new THREE.BoxGeometry(2.8, 2.8, 2.8),
                 transparentMat
             );
             camCube.renderOrder = 5;
@@ -1068,7 +1070,7 @@ if (model_wrapper != undefined) {
             `;
             pointLabel = new CSS2DObject(labelDiv);
             pointLabel.name = "itemLabel";
-            pointLabel.position.set(0, 0, 0);
+            pointLabel.position.set(-0.5, 0, 0);
             pointLabel.center.set(0, 0);
             camCube.add(pointLabel);
             //add pulse
@@ -1076,7 +1078,7 @@ if (model_wrapper != undefined) {
             pluseDiv.className = "labelPulse";
             pulseLabel = new CSS2DObject(pluseDiv);
             pulseLabel.name = "pointerLabel";
-            pulseLabel.position.set(0, 0, 0);
+            pulseLabel.position.set(-0.5, 0, 0);
             pulseLabel.center.set(0, 0);
             camCube.add(pulseLabel);
             InteractiveItemGrup.add(camCube);
@@ -1090,12 +1092,15 @@ if (model_wrapper != undefined) {
 
             //add fan box
             let fanCube = new THREE.Mesh(
-                new THREE.BoxGeometry(1.4, 2, 2),
+                // new THREE.BoxGeometry(1.4, 2, 2),
+                new THREE.BoxGeometry(3.4, 6, 4),
                 transparentMat
             );
             fanCube.renderOrder = 5;
             fanCube.name = elm.fan.id;
-            fanCube.position.set(21.85, 5, -2.8);
+            // fanCube.position.set(21.85, 5, -2.8);
+            fanCube.position.set(21.85, 6.5, -2.8);
+
             //add text
             labelDiv = document.createElement("span");
             labelDiv.className = "fanCubeLabel";
@@ -1118,7 +1123,7 @@ if (model_wrapper != undefined) {
             pluseDiv.className = "labelPulse";
             pulseLabel = new CSS2DObject(pluseDiv);
             pulseLabel.name = "pointerLabel";
-            pulseLabel.position.set(0, 0, 0);
+            pulseLabel.position.set(-0.25, -0.5, 0);
             pulseLabel.center.set(0, 0);
             fanCube.add(pulseLabel);
             InteractiveItemGrup.add(fanCube);
@@ -1201,7 +1206,7 @@ if (model_wrapper != undefined) {
             pluseDiv.className = "labelPulse";
             pulseLabel = new CSS2DObject(pluseDiv);
             pulseLabel.name = "pointerLabel";
-            pulseLabel.position.set(0, 0, 0);
+            pulseLabel.position.set(-0.35, 0, 0);
             pulseLabel.center.set(0, 0);
             scentCube.add(pulseLabel);
             InteractiveItemGrup.add(scentCube);
@@ -1331,8 +1336,8 @@ if (model_wrapper != undefined) {
                             camera.position,
                             {
                                 x: obj.pos.x - 8,
-                                y: obj.pos.y + 1.5,
-                                z: obj.pos.z + 5,
+                                y: obj.pos.y -15,
+                                z: obj.pos.z + 1.5,
                             },
                             "<"
                         ).to(controls, {
