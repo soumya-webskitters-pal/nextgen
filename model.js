@@ -23,12 +23,11 @@ if (model_wrapper != undefined) {
     //reset button
     const resetCam = container.querySelector(".reset");
 
+
     gsap.set(info_modal, {
-        opacity: 0,
-        pointerEvents: "none",
         yPercent: 100,
     });
-    gsap.set([resetCam, modelCloser], {
+    gsap.set([resetCam, modelCloser, info_modal], {
         opacity: 0,
         pointerEvents: "none",
     });
@@ -36,20 +35,21 @@ if (model_wrapper != undefined) {
     modelViewer.addEventListener("click", function () {
         modelRender = true;
         container.scrollIntoView({ behavior: 'smooth' });
-        info_modal
-            .querySelector('.modal_data[data-id="arena"]')
-            .classList.add("show");
-        gsap.set(resetCam, {
-            opacity: 0,
-            pointerEvents: "none",
-        });
-        if (container.querySelector("canvas") == null) {
-            modelApp();
-        }
         gsap.to(modelViewer, {
             pointerEvents: "none",
             opacity: 0,
         });
+        info_modal
+            .querySelector('.modal_data[data-id="arena"]')
+            .classList.add("show");
+
+        if (container.querySelector("canvas") == null) {
+            modelApp();
+        }
+        let navbar = document.querySelector(".navbar");
+        if (navbar != undefined) {
+            document.querySelector(".navbar").classList.add("hide");
+        }
         gsap.to(".imms_container", {
             delay: 0.3,
             duration: 0.5,
@@ -59,54 +59,24 @@ if (model_wrapper != undefined) {
                 gsap.to(container, {
                     pointerEvents: "all",
                 });
-                if (container.classList.contains("loaded")) {
-                    gsap.to(info_modal, {
-                        delay: 2,
-                        opacity: 1,
-                        pointerEvents: "all",
-                        yPercent: 0,
-                        duration: 0.5,
-                    });
-                }
                 document.querySelector("html").classList.add("modelView");
                 document.body.classList.add("modelView");
                 modelCloser.style.display = "inline-flex";
-                let navbar = document.querySelector(".navbar");
-                if (navbar != undefined) {
-                    document.querySelector(".navbar").classList.add("hide");
-                }
+                gsap.to(info_modal, {
+                    yPercent: 100,
+                });
+                gsap.to([modelCloser, info_modal], {
+                    opacity: 1,
+                    pointerEvents: "all",
+                });
+                gsap.set(resetCam, {
+                    opacity: 0,
+                    pointerEvents: "none",
+                });
             },
         });
     });
-    modelCloser.addEventListener("click", function () {
-        resetCam.click();
-        gsap.set(container, { pointerEvents: "none" });
-        modelCloser.style.display = "none";
-        gsap.to(info_modal, {
-            opacity: 0,
-            pointerEvents: "none",
-            yPercent: 100,
-            duration: 0.5,
-        });
-        gsap.to(".imms_container", {
-            duration: 0.5,
-            pointerEvents: "all",
-            opacity: 1,
-            onComplete: () => {
-                modelRender = false;
-                gsap.to(modelViewer, {
-                    pointerEvents: "all",
-                    opacity: 1,
-                });
-                let navbar = document.querySelector(".navbar");
-                if (navbar != undefined) {
-                    document.querySelector(".navbar").classList.remove("hide");
-                }
-                document.querySelector("html").classList.remove("modelView");
-                document.body.classList.remove("modelView");
-            }
-        });
-    });
+
 
     function modelApp() {
         const container = document.getElementById("canvas");
@@ -409,6 +379,37 @@ if (model_wrapper != undefined) {
                     e.classList.remove("show");
                     e.classList.remove("clicked");
                 })
+            });
+
+            modelCloser.addEventListener("click", function () {
+                resetCam.click();
+                gsap.set(container, { pointerEvents: "none" });
+                modelCloser.style.display = "none";
+                gsap.to([modelCloser, info_modal, resetCam], {
+                    opacity: 0,
+                    pointerEvents: "none",
+                });
+                gsap.to(info_modal, {
+                    yPercent: 100,
+                });
+                gsap.to(".imms_container", {
+                    duration: 0.5,
+                    pointerEvents: "all",
+                    opacity: 1,
+                    onComplete: () => {
+                        modelRender = false;
+                        gsap.to(modelViewer, {
+                            pointerEvents: "all",
+                            opacity: 1,
+                        });
+                        let navbar = document.querySelector(".navbar");
+                        if (navbar != undefined) {
+                            document.querySelector(".navbar").classList.remove("hide");
+                        }
+                        document.querySelector("html").classList.remove("modelView");
+                        document.body.classList.remove("modelView");
+                    }
+                });
             });
         }
 
@@ -1260,7 +1261,12 @@ if (model_wrapper != undefined) {
                             y: model.camera.position.y,
                             z: model.camera.position.z,
                         },
-                        "<")
+                        "<");
+                gsap.set(resetCam, {
+                    opacity: 0,
+                    duration: 0.3,
+                    pointerEvents: "none",
+                });
             }
             else {
                 zoomed = true;
