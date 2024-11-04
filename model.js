@@ -36,11 +36,6 @@ if (model_wrapper != undefined) {
     modelViewer.addEventListener("click", function () {
         modelRender = true;
         container.scrollIntoView({ behavior: 'smooth' });
-        gsap.set(info_modal, {
-            opacity: 0,
-            pointerEvents: "none",
-            yPercent: 100,
-        });
         info_modal
             .querySelector('.modal_data[data-id="arena"]')
             .classList.add("show");
@@ -64,12 +59,15 @@ if (model_wrapper != undefined) {
                 gsap.to(container, {
                     pointerEvents: "all",
                 });
-                gsap.to(info_modal, {
-                    opacity: 1,
-                    pointerEvents: "all",
-                    yPercent: 0,
-                    duration: 0.5,
-                });
+                if (container.classList.contains("loaded")) {
+                    gsap.to(info_modal, {
+                        delay: 2,
+                        opacity: 1,
+                        pointerEvents: "all",
+                        yPercent: 0,
+                        duration: 0.5,
+                    });
+                }
                 document.querySelector("html").classList.add("modelView");
                 document.body.classList.add("modelView");
                 modelCloser.style.display = "inline-flex";
@@ -382,7 +380,7 @@ if (model_wrapper != undefined) {
         //// enable setup
         function enableSetup() {
             gsap.to(loader, {
-                delay: 1.5,
+                delay: 0.5,
                 opacity: 0,
                 duration: 0.5,
                 onComplete: () => {
@@ -390,11 +388,6 @@ if (model_wrapper != undefined) {
                     info_modal
                         .querySelector('.modal_data[data-id="arena"]')
                         .classList.add("show");
-                    gsap.set(info_modal, {
-                        opacity: 1,
-                        pointerEvents: "all",
-                        yPercent: 0,
-                    });
                 },
             });
 
@@ -483,7 +476,6 @@ if (model_wrapper != undefined) {
             lights2.position.set(0, -3, 0);
             lights2.name = "pillerLights2";
             pillerLightGroup.add(lights2);
-            // console.log(lights2);
 
             pillerLightGroup.add(
                 new THREE.Mesh(
@@ -740,7 +732,6 @@ if (model_wrapper != undefined) {
             });
             let roomObj = world.getObjectByName(elm.wall.name);
             roomObj.material = roomMat;
-            // console.log("room:", roomObj.material);
 
             //add base floor
             let baseFloorMat = new THREE.MeshStandardMaterial({
@@ -759,7 +750,6 @@ if (model_wrapper != undefined) {
             baseFloor.position.set(0, 0.06, 20);
             baseFloor.rotation.x = Math.PI / 2;
             scene.add(baseFloor);
-            // console.log("baseFloor:", baseFloor);
 
             //add stage floor
             let floorMat = new THREE.MeshStandardMaterial({
@@ -787,7 +777,6 @@ if (model_wrapper != undefined) {
             floor.position.set(0, 0.08, 7.5);
             floor.rotation.x = Math.PI / 2;
             scene.add(floor);
-            // console.log("floor:", floor);
 
             //create stage area line
             //create v-line
@@ -883,7 +872,6 @@ if (model_wrapper != undefined) {
             let stageCageObj = world.getObjectByName(elm.cage.name);
             stageCageObj.castShadow = true;
             stageCageObj.material = stageMat;
-            // console.log("stageCage:", stageCageObj.material);
 
             //add color to stage poster area
             let posterBoxMat = new THREE.MeshBasicMaterial({
@@ -894,7 +882,6 @@ if (model_wrapper != undefined) {
                 let posterObj = world.getObjectByName(poster);
                 posterObj.material = posterBoxMat;
                 posterObj.matrixAutoUpdate = false;
-                // console.log("poster:", posterObj);
             });
 
             //poster texture
@@ -914,7 +901,6 @@ if (model_wrapper != undefined) {
             let rightPoster = poster.clone();
             rightPoster.position.x = rightPoster.position.x + 22;
             scene.add(rightPoster);
-            // console.log("poster:", poster,rightPoster);
 
             //add texture to camera
             let camMat = new THREE.MeshStandardMaterial({
@@ -925,12 +911,10 @@ if (model_wrapper != undefined) {
                 map: elm.camera.map,
                 aoMap: model.theme.map,
             });
-            // console.log(camMat);
 
             let cameraObj = world.getObjectByName(elm.camera.name);
             // cameraObj.castShadow = true;
             cameraObj.material = camMat;
-            // console.log("camera:", cameraObj);
 
             //add texture to fan
             let fanMat = new THREE.MeshStandardMaterial({
@@ -943,7 +927,6 @@ if (model_wrapper != undefined) {
             });
             let fanObj = world.getObjectByName(elm.fan.name);
             fanObj.material = fanMat;
-            //console.log("fan:", fanObj);
 
             //add texture to metal wheel
             let wheelMat = new THREE.MeshStandardMaterial({
@@ -958,7 +941,6 @@ if (model_wrapper != undefined) {
             wheelObj.castShadow = true;
             wheelObj.receiveShadow = true;
             wheelObj.material = wheelMat;
-            //console.log("wheel:", wheelObj);
 
             //add texture to box
             let boxMat = new THREE.MeshStandardMaterial({
@@ -983,7 +965,6 @@ if (model_wrapper != undefined) {
             boxObj.matrixAutoUpdate = true;
             boxObj.material = boxMat;
             boxObj.material.map.repeat.set(1.5, 3.85);
-            // console.log("box:", boxMat);
 
             //add texture to heat unit
             let heatMat = new THREE.MeshStandardMaterial({
@@ -996,7 +977,6 @@ if (model_wrapper != undefined) {
             });
             let heatObj = world.getObjectByName(elm.heatbox.name);
             heatObj.material = heatMat;
-            // console.log("heatbox:", heatObj);
 
             //add texture to heatBox rope
             let heatRopeMat = new THREE.MeshBasicMaterial({
@@ -1005,7 +985,6 @@ if (model_wrapper != undefined) {
             });
             let heatRopeObj = world.getObjectByName(elm.heatboxStand.name);
             heatRopeObj.material = heatRopeMat;
-            // console.log("heatbox rope:", heatRopeObj);
 
             //add texture to sensor unit
             let sensorBodyMat = new THREE.MeshStandardMaterial({
@@ -1024,7 +1003,6 @@ if (model_wrapper != undefined) {
                 let sensorObj = world.getObjectByName(sensorOBJS);
                 stageCageObj.castShadow = true;
                 sensorObj.material = sensorBodyMat;
-                // console.log(sensorObj);
             });
             let sensorCapMat = new THREE.MeshStandardMaterial({
                 side: THREE.DoubleSide,
@@ -1036,7 +1014,6 @@ if (model_wrapper != undefined) {
                 let sensorObj = world.getObjectByName(sensorOBJS);
                 stageCageObj.castShadow = true;
                 sensorObj.material = sensorCapMat;
-                // console.log(sensorObj);
             });
 
             //add texture to screen
@@ -1050,7 +1027,6 @@ if (model_wrapper != undefined) {
             screenMat.map.repeat.set(1.5, 1.5);
             let screenObj = world.getObjectByName(elm.screen.name);
             screenObj.material = screenMat;
-            // console.log(screenObj.material);
 
             addInteractiveItem();
         }
@@ -1068,7 +1044,6 @@ if (model_wrapper != undefined) {
                 opacity: 0,
                 color: "#000000",
             });
-            // console.log(transparentMat);
 
             //add camera box
             let camCube = new THREE.Mesh(
@@ -1239,8 +1214,6 @@ if (model_wrapper != undefined) {
         }
 
         function zoomInTimeline(obj = null, reset = false) {
-            // console.log(obj);
-
             controls.enabled = false;
 
             //hide all labels
@@ -1290,7 +1263,6 @@ if (model_wrapper != undefined) {
                         "<")
             }
             else {
-                // console.log(obj);
                 zoomed = true;
                 obj.label.classList.add("clicked");
                 var modal_data = info_modal.querySelector(
@@ -1428,7 +1400,6 @@ if (model_wrapper != undefined) {
             mouse.x = (e.clientX / sizes.width) * 2 - 1;
             mouse.y = -(e.clientY / sizes.height) * 2 + 1;
             raycaster.setFromCamera(mouse, camera);
-            // console.log(interactiveMeshes);
 
             let target = new THREE.Vector3();
 
@@ -1448,18 +1419,11 @@ if (model_wrapper != undefined) {
                         if (instObj.name == "itemLabel"
                         ) {
                             instObj.element.classList.add("show");
-                            // console.log(instObj);
                             instObj.getWorldPosition(target);
-                            // console.log(target);
                         }
 
                         if (e.type == "click") {
                             if (el.clickable == true) {
-                                // console.log({
-                                //     label: instObj.element,
-                                //     target: el.id,
-                                //     pos: target,
-                                // });
                                 if (!instObj.element.classList.contains("clicked")) {
                                     zoomInTimeline({
                                         label: instObj.element,
