@@ -301,7 +301,7 @@ if (model_wrapper != undefined) {
                 model.camera.position.z = model.camera.position.z + 35;
             }
             else{
-                model.camera.position.z = model.camera.position.z + 25;
+                model.camera.position.z = model.camera.position.z + 8.5;
             }
         })
         model.camera.distance.max = model.camera.position.z;
