@@ -194,7 +194,7 @@ if (model_wrapper != undefined) {
                     map: textureLoader.load(`${hostURL}/texture/Vr_sensor.webp`),
                     color: "#535353",
                     click: true,
-                    text: "Scent Diffusion",
+                    text: "Scent Diffuser",
                     id: "scent_item",
                 },
                 sensorCap: {
